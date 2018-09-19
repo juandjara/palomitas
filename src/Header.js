@@ -57,7 +57,7 @@ class Header extends React.Component {
     return (
       <Headroom>
         <HeaderStyle>
-          <img alt="logo" className="logo" src="palomitas-outline.png"></img>
+          <img alt="logo" className="logo" src="/palomitas-outline.png"></img>
           <h2>Palomitas</h2>
           <div style={{flexGrow: 1}}></div>
           <div className="search-box">

@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import theme from './theme';
 import Spinner from './Spinner';
 import Waypoint from 'react-waypoint';
+import { Link } from 'react-router-dom';
+import config from './config';
 
 const Grid = styled.section`
   display: grid;
@@ -20,18 +22,20 @@ const Grid = styled.section`
   }
   
   .show {
+    display: block;
     position: relative;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.3s ease-in-out;
     border: 1px solid transparent;
-    border-radius: 4px;
     min-height: 100px;
     &:hover {
       transform: scale(1.05);
     }
     img {
       max-width: 100%;
+      border-radius: 4px 4px;
     }
     .title {
+      border-radius: 0 0 4px 4px;
       position: absolute;
       bottom: 0;
       left: 0;
@@ -63,15 +67,6 @@ const SelectWrapper = styled.div`
   }
 `;
 
-const sortOptions = [
-  {label: 'Tendencias', value: 'trending'},
-  {label: 'Nombre', value: 'name'},
-  {label: 'Valoración', value: 'rating'},
-  {label: 'Última actualización', value: 'updated'},
-  {label: 'Año de emision', value: 'year'}
-];
-const catalogApi = 'https://tv-v2.api-fetch.website';
-
 function parseQueryString(url) {
   return new URLSearchParams(url.replace('?', ''));
 }
@@ -79,7 +74,7 @@ function parseQueryString(url) {
 class Home extends Component {
   state = {
     loading: true,
-    sort: sortOptions[0],
+    sort: config.sortOptions[0],
     page: 1,
     search: '',
     shows: [],
@@ -120,7 +115,7 @@ class Home extends Component {
   fetchShows() {
     const {sort, page, search} = this.state;
     this.setState({loading: true})
-    const url = `${catalogApi}/shows/${page}?sort=${sort.value}`;
+    const url = `${config.catalogApi}/shows/${page}?sort=${sort.value}`;
     return fetch(url).then(res => res.json())
     .then(data => {
       const parsed = data.map(show => {
@@ -154,7 +149,7 @@ class Home extends Component {
             <label htmlFor="sort">Ordenar por</label>
             <Select
               value={sort}
-              options={sortOptions}
+              options={config.sortOptions}
               onChange={this.handleSortChange}
             />
           </SelectWrapper>
@@ -162,14 +157,14 @@ class Home extends Component {
         </div>
         <Grid>
           {shows.map(show => (
-            <div className="show" key={show._id}>
+            <Link to={`/show/${show._id}`} className="show" key={show._id}>
               <img alt="poster" src={show.images.fanart} />
               <div className="title">{show.title}</div>
-            </div>
+            </Link>
           ))}
         </Grid>
         {loading ? 
-          <Spinner style={{margin: '60px auto'}} /> :
+          <Spinner /> :
           <div style={{height: 1}}>
             <Waypoint scrollableAncestor={window} onEnter={this.handleNextPage} />
           </div>

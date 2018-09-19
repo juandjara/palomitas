@@ -10,7 +10,7 @@ const SpinnerStyle = styled.div`
 
   color: #ffffff;
   font-size: 10px;
-  margin: 80px auto;
+  margin: 60px auto;
   position: relative;
   text-indent: -9999em;
   transform: translateZ(0);

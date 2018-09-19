@@ -2,6 +2,7 @@ import React from 'react';
 import {Flex, Box} from 'rebass'
 import Icon from './Icon';
 import styled from 'styled-components';
+import theme from './theme';
 
 const HeadingStyle = styled.header`
   padding: 8px 16px;
@@ -11,6 +12,7 @@ const HeadingStyle = styled.header`
     font-weight: normal;
     font-size: 28px;
     line-height: 1.4;
+    text-shadow: ${theme.textShadow};
   }
 `;
 const HeadingBox = styled(Box)`

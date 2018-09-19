@@ -5,6 +5,7 @@ import { ContextProvider } from './Context';
 import Home from './Home';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
+import Show from './Show';
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route path="/home" component={Home} />
+            <Route path="/show/:id" component={Show} />
           </Switch>
           </Fragment>
         </ThemeProvider>
