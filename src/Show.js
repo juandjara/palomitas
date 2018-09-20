@@ -88,6 +88,12 @@ const EpisodeList = styled.section`
 
 const SelectedEpSection = styled.section`
   margin-top: ${theme.spaces[4]}px;
+  display: flex;
+  align-items: flex-start;
+  .subtitles {
+    flex: 0 0 300px;
+    margin-left: ${theme.spaces[3]}px;
+  }
   h2 {
     margin-bottom: ${theme.spaces[2]}px;
   }
@@ -102,6 +108,15 @@ const SelectedEpSection = styled.section`
   }
 `;
 
+function parseEpisodeNumber(epString) {
+  const regex = /s(\d+)e(\d+)/;
+  const match = regex.exec(epString);
+  return match && {
+    season: Number(match[1]),
+    episode: Number(match[2])
+  }
+}
+
 class Show extends Component {
   state = {
     loading: true,
@@ -112,7 +127,27 @@ class Show extends Component {
     },
     selectedEpisode: null
   }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const search = nextProps.location.search;
+    const params = new URLSearchParams(search.replace('?', ''));
+    if (!params.get('ep') || !prevState.seasons.length) {
+      return null;
+    }
+    const epNumber = parseEpisodeNumber(params.get('ep'));
+    const season = prevState.seasons.find(s => s.value === epNumber.season);
+    const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
+    return {
+      ...prevState,
+      selectedEpisode: episode
+    }
+  }
+
   componentDidMount() {
+    this.fetchShow();
+  }
+
+  fetchShow() {
     const id = this.props.match.params.id;
     const url = `${config.catalogApi}/show/${id}`;
     fetch(url).then(res => res.json())
@@ -135,9 +170,11 @@ class Show extends Component {
       this.onSelectSeason(seasons[0]);
     });
   }
+
   goBack() {
     this.props.history.goBack();
   }
+
   onSelectSeason = (season) => {
     season.episodes.sort((a,b) => {
       return a.episode - b.episode;
@@ -145,13 +182,16 @@ class Show extends Component {
     const selectedEpisode = season.episodes[0];
     this.setState({selectedSeason: season, selectedEpisode});
   }
+
   getEpisodeLink(ep) {
     const id = this.state.show._id;
-    return `/show/${id}?e=s${ep.season}e${ep.episode}`;
+    return `/show/${id}?ep=s${ep.season}e${ep.episode}`;
   }
+
   getEpisodeNumber(ep) {
     return `${ep.season}x${ep.episode < 10 ? `0${ep.episode}` : ep.episode}`;
   }
+
   renderShow() {
     const {show, seasons, selectedSeason, selectedEpisode} = this.state;
     return (
@@ -188,16 +228,23 @@ class Show extends Component {
       </div>
     )
   }
+
   renderSelectedEpisode() {
     const ep = this.state.selectedEpisode;
     return (
       <SelectedEpSection>
-        <h2>{this.getEpisodeNumber(ep)} {ep.title}</h2>
-        <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
-        <p className="overview">{ep.overview}</p>
+        <div className="info">
+          <h2>{this.getEpisodeNumber(ep)} {ep.title}</h2>
+          <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
+          <p className="overview">{ep.overview}</p>
+        </div>
+        <div className="subtitles">
+          <h2>Subtitulos</h2>
+        </div>
       </SelectedEpSection>
     );
   }
+
   render() {
     return (
       <ShowStyle>
