@@ -7,6 +7,7 @@ import Spinner from './Spinner';
 import theme from './theme';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
+import SubtitleSelector from './SubtitleSelector';
 
 const ShowStyle = styled.main`
   padding: 8px;
@@ -66,7 +67,6 @@ const EpisodeList = styled.section`
     margin: ${theme.spaces[3]}px 0;
   }
   li {
-    padding: ${theme.spaces[3]}px ${theme.spaces[2]}px;
     color: ${theme.colors.black4};
     background-color: white;
     .number {
@@ -82,6 +82,10 @@ const EpisodeList = styled.section`
     }
     &:hover {
       background-color: ${theme.colors.grey1};
+    }
+    a {
+      display: block;
+      padding: ${theme.spaces[3]}px ${theme.spaces[2]}px;
     }
   }
 `;
@@ -106,6 +110,13 @@ const SelectedEpSection = styled.section`
     max-width: 768px;
     text-align: justify;
   }
+  .actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: ${theme.spaces[5]}px;
+    margin-bottom: ${theme.spaces[2]}px;
+  }
 `;
 
 function parseEpisodeNumber(epString) {
@@ -125,7 +136,8 @@ class Show extends Component {
     selectedSeason: {
       episodes: []
     },
-    selectedEpisode: null
+    selectedEpisode: null,
+    selectedTorrent: null
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -135,11 +147,20 @@ class Show extends Component {
       return null;
     }
     const epNumber = parseEpisodeNumber(params.get('ep'));
+    if (
+      prevState.selectedEpisode &&
+      epNumber.season === prevState.selectedEpisode.season &&
+      epNumber.episode === prevState.selectedEpisode.episode
+    ) {
+      return null;
+    }
     const season = prevState.seasons.find(s => s.value === epNumber.season);
     const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
+    const torrent = episode.torrents['720p'] || episode.torrents[0];
     return {
       ...prevState,
-      selectedEpisode: episode
+      selectedEpisode: episode,
+      selectedTorrent: torrent
     }
   }
 
@@ -167,7 +188,7 @@ class Show extends Component {
         seasons,
         loading: false
       });
-      this.onSelectSeason(seasons[0]);
+      this.selectSeason(seasons[0]);
     });
   }
 
@@ -175,12 +196,17 @@ class Show extends Component {
     this.props.history.goBack();
   }
 
-  onSelectSeason = (season) => {
+  selectSeason = (season) => {
     season.episodes.sort((a,b) => {
       return a.episode - b.episode;
     })
-    const selectedEpisode = season.episodes[0];
-    this.setState({selectedSeason: season, selectedEpisode});
+    const episode = season.episodes[0];
+    const torrent = episode.torrents['720p'] || episode.torrents[0];
+    this.setState({
+      selectedSeason: season,
+      selectedEpisode: episode,
+      selectedTorrent: torrent
+    });
   }
 
   getEpisodeLink(ep) {
@@ -201,7 +227,7 @@ class Show extends Component {
           <Select className="select" 
             value={selectedSeason} 
             options={seasons}
-            onChange={this.onSelectSeason} />
+            onChange={this.selectSeason} />
           <ul>
             {selectedSeason.episodes.map(ep => (
               <li key={ep.tvdb_id}>
@@ -231,15 +257,37 @@ class Show extends Component {
 
   renderSelectedEpisode() {
     const ep = this.state.selectedEpisode;
+    const selectedTorrent = this.state.selectedTorrent;
+    const torrents = Object.keys(ep.torrents)
+    .filter(key => key !== '0')
+    .map(key => ({label: key, ...ep.torrents[key]}));
     return (
       <SelectedEpSection>
         <div className="info">
           <h2>{this.getEpisodeNumber(ep)} {ep.title}</h2>
           <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
           <p className="overview">{ep.overview}</p>
+          <div className="actions">
+            <div className="quality-selector">
+              <label>Calidad: </label>
+              {torrents.map(torrent => (
+                <Button 
+                  style={{opacity: 1}}
+                  disabled={torrent.url === selectedTorrent.url}
+                  main={torrent.url === selectedTorrent.url} 
+                  onClick={() => this.setState({selectedTorrent: torrent})}
+                  key={torrent.label}>{torrent.label}</Button>
+              ))}
+            </div>
+            <Button main>
+              <Icon style={{marginRight: 4}} icon="arrow_forward" size="1em" />
+              Siguiente episodio
+            </Button>
+          </div>
         </div>
         <div className="subtitles">
           <h2>Subtitulos</h2>
+          <SubtitleSelector />
         </div>
       </SelectedEpSection>
     );

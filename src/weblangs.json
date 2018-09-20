@@ -1,0 +1,242 @@
+[
+  {
+    "id": "alb",
+    "isoId": "sq",
+    "name": "Albanian"
+  },
+  {
+    "id": "ara",
+    "isoId": "ar",
+    "name": "Arabic"
+  },
+  {
+    "id": "baq",
+    "isoId": "eu",
+    "name": "Basque"
+  },
+  {
+    "id": "bul",
+    "isoId": "bg",
+    "name": "Bulgarian"
+  },
+  {
+    "id": "cat",
+    "isoId": "ca",
+    "name": "Catalan"
+  },
+  {
+    "id": "chi",
+    "isoId": "zh",
+    "name": "Chinese"
+  },
+  {
+    "id": "cze",
+    "isoId": "cs",
+    "name": "Czech"
+  },
+  {
+    "id": "dan",
+    "isoId": "da",
+    "name": "Danish"
+  },
+  {
+    "id": "dut",
+    "isoId": "nl",
+    "name": "Dutch"
+  },
+  {
+    "id": "eng",
+    "isoId": "en",
+    "name": "English"
+  },
+  {
+    "id": "est",
+    "isoId": "et",
+    "name": "Estonian"
+  },
+  {
+    "id": "fin",
+    "isoId": "fi",
+    "name": "Finnish"
+  },
+  {
+    "id": "fre",
+    "isoId": "fr",
+    "name": "French"
+  },
+  {
+    "id": "geo",
+    "isoId": "ka",
+    "name": "Georgian"
+  },
+  {
+    "id": "ger",
+    "isoId": "de",
+    "name": "German"
+  },
+  {
+    "id": "glg",
+    "isoId": "gl",
+    "name": "Galician"
+  },
+  {
+    "id": "ell",
+    "isoId": "el",
+    "name": "Greek"
+  },
+  {
+    "id": "heb",
+    "isoId": "he",
+    "name": "Hebrew"
+  },
+  {
+    "id": "hin",
+    "isoId": "hi",
+    "name": "Hindi"
+  },
+  {
+    "id": "hrv",
+    "isoId": "hr",
+    "name": "Croatian"
+  },
+  {
+    "id": "hun",
+    "isoId": "hu",
+    "name": "Hungarian"
+  },
+  {
+    "id": "ice",
+    "isoId": "is",
+    "name": "Icelandic"
+  },
+  {
+    "id": "ind",
+    "isoId": "id",
+    "name": "Indonesian"
+  },
+  {
+    "id": "ita",
+    "isoId": "it",
+    "name": "Italian"
+  },
+  {
+    "id": "jpn",
+    "isoId": "ja",
+    "name": "Japanese"
+  },
+  {
+    "id": "khm",
+    "isoId": "km",
+    "name": "Khmer"
+  },
+  {
+    "id": "kor",
+    "isoId": "ko",
+    "name": "Korean"
+  },
+  {
+    "id": "mac",
+    "isoId": "mk",
+    "name": "Macedonian"
+  },
+  {
+    "id": "may",
+    "isoId": "ms",
+    "name": "Malay"
+  },
+  {
+    "id": "nor",
+    "isoId": "no",
+    "name": "Norwegian"
+  },
+  {
+    "id": "oci",
+    "isoId": "oc",
+    "name": "Occitan"
+  },
+  {
+    "id": "per",
+    "isoId": "fa",
+    "name": "Persian"
+  },
+  {
+    "id": "pol",
+    "isoId": "pl",
+    "name": "Polish"
+  },
+  {
+    "id": "por",
+    "isoId": "pt",
+    "name": "Portuguese"
+  },
+  {
+    "id": "rus",
+    "isoId": "ru",
+    "name": "Russian"
+  },
+  {
+    "id": "scc",
+    "isoId": "sr",
+    "name": "Serbian"
+  },
+  {
+    "id": "sin",
+    "isoId": "si",
+    "name": "Sinhalese"
+  },
+  {
+    "id": "slo",
+    "isoId": "sk",
+    "name": "Slovak"
+  },
+  {
+    "id": "slv",
+    "isoId": "sl",
+    "name": "Slovenian"
+  },
+  {
+    "id": "spa",
+    "isoId": "es",
+    "name": "Spanish"
+  },
+  {
+    "id": "swe",
+    "isoId": "sv",
+    "name": "Swedish"
+  },
+  {
+    "id": "tgl",
+    "isoId": "tl",
+    "name": "Tagalog"
+  },
+  {
+    "id": "tha",
+    "isoId": "th",
+    "name": "Thai"
+  },
+  {
+    "id": "tur",
+    "isoId": "tr",
+    "name": "Turkish"
+  },
+  {
+    "id": "ukr",
+    "isoId": "uk",
+    "name": "Ukrainian"
+  },
+  {
+    "id": "vie",
+    "isoId": "vi",
+    "name": "Vietnamese"
+  },
+  {
+    "id": "rum",
+    "isoId": "ro",
+    "name": "Romanian"
+  },
+  {
+    "id": "pob",
+    "isoId": "pb",
+    "name": "Brazilian"
+  }
+]
