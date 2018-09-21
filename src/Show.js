@@ -119,15 +119,6 @@ const SelectedEpSection = styled.section`
   }
 `;
 
-function parseEpisodeNumber(epString) {
-  const regex = /s(\d+)e(\d+)/;
-  const match = regex.exec(epString);
-  return match && {
-    season: Number(match[1]),
-    episode: Number(match[2])
-  }
-}
-
 class Show extends Component {
   state = {
     loading: true,
@@ -140,32 +131,18 @@ class Show extends Component {
     selectedTorrent: null
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const search = nextProps.location.search;
-    const params = new URLSearchParams(search.replace('?', ''));
-    if (!params.get('ep') || !prevState.seasons.length) {
-      return null;
-    }
-    const epNumber = parseEpisodeNumber(params.get('ep'));
-    if (
-      prevState.selectedEpisode &&
-      epNumber.season === prevState.selectedEpisode.season &&
-      epNumber.episode === prevState.selectedEpisode.episode
-    ) {
-      return null;
-    }
-    const season = prevState.seasons.find(s => s.value === epNumber.season);
-    const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
-    const torrent = episode.torrents['720p'] || episode.torrents[0];
-    return {
-      ...prevState,
-      selectedEpisode: episode,
-      selectedTorrent: torrent
-    }
-  }
-
   componentDidMount() {
     this.fetchShow();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const oldSearch = prevProps.location.search;
+    const search = this.props.location.search;
+    if (oldSearch === search || !this.state.seasons.length) {
+      return;
+    }
+    const epNumber = this.getEpNumber(this.props);
+    this.selectEpisode(epNumber);
   }
 
   fetchShow() {
@@ -183,39 +160,73 @@ class Show extends Component {
         return acum;
       }, {});
       const seasons = Object.keys(seasonMap).map(key => seasonMap[key]);
+      seasons.forEach(season => {
+        season.episodes.sort((a,b) => {
+          return a.episode - b.episode;
+        })
+      })
       this.setState({
         show: data,
         seasons,
         loading: false
+      }, () => {
+        const epNumber = this.getEpNumber(this.props) || seasons[0].episodes[0];
+        this.selectEpisode(epNumber);
       });
-      this.selectSeason(seasons[0]);
     });
   }
 
-  goBack() {
-    this.props.history.goBack();
+  selectSeason = (season) => {
+    this.setState({selectedSeason: season});
   }
 
-  selectSeason = (season) => {
-    season.episodes.sort((a,b) => {
-      return a.episode - b.episode;
-    })
-    const episode = season.episodes[0];
+  selectEpisode(epNumber) {
+    const season = this.state.seasons.find(s => s.value === epNumber.season);
+    const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
     const torrent = episode.torrents['720p'] || episode.torrents[0];
     this.setState({
       selectedSeason: season,
       selectedEpisode: episode,
       selectedTorrent: torrent
-    });
+    })
   }
 
-  getEpisodeLink(ep) {
+  getEpNumber({location}) {
+    const params = new URLSearchParams(location.search.replace('?', ''));
+    const epString = params.get('ep');
+    const regex = /s(\d+)e(\d+)/;
+    const match = regex.exec(epString);
+    return match && {
+      season: Number(match[1]),
+      episode: Number(match[2])
+    }
+  }
+
+  getNextEpisodeLink() {
+    const {seasons, selectedSeason, selectedEpisode} = this.state
+    const nextEpIndex = selectedSeason.episodes.indexOf(selectedEpisode) + 1;
+    let nextEp = selectedSeason.episodes[nextEpIndex];
+    if (!nextEp) {
+      const nextSeasonIndex = seasons.indexOf(selectedSeason) + 1;
+      const nextSeason = seasons[nextSeasonIndex];
+      if (nextSeason) {
+        nextEp = nextSeason.episodes[0];
+      }
+    }
+    return nextEp && this.makeEpisodeLink(nextEp);
+  }
+
+  makeEpisodeLink(ep) {
     const id = this.state.show._id;
     return `/show/${id}?ep=s${ep.season}e${ep.episode}`;
   }
 
-  getEpisodeNumber(ep) {
+  formatEpisodeNumber(ep) {
     return `${ep.season}x${ep.episode < 10 ? `0${ep.episode}` : ep.episode}`;
+  }
+
+  goBack() {
+    this.props.history.goBack();
   }
 
   renderShow() {
@@ -231,8 +242,8 @@ class Show extends Component {
           <ul>
             {selectedSeason.episodes.map(ep => (
               <li key={ep.tvdb_id}>
-                <Link to={this.getEpisodeLink(ep)}>                
-                  <span className="number">{this.getEpisodeNumber(ep)}</span>
+                <Link to={this.makeEpisodeLink(ep)}>                
+                  <span className="number">{this.formatEpisodeNumber(ep)}</span>
                   <span>{ep.title}</span>
                 </Link>
               </li>
@@ -257,6 +268,7 @@ class Show extends Component {
 
   renderSelectedEpisode() {
     const ep = this.state.selectedEpisode;
+    const nextEpLink = this.getNextEpisodeLink();
     const selectedTorrent = this.state.selectedTorrent;
     const torrents = Object.keys(ep.torrents)
     .filter(key => key !== '0')
@@ -264,7 +276,7 @@ class Show extends Component {
     return (
       <SelectedEpSection>
         <div className="info">
-          <h2>{this.getEpisodeNumber(ep)} {ep.title}</h2>
+          <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
           <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
           <p className="overview">{ep.overview}</p>
           <div className="actions">
@@ -279,10 +291,14 @@ class Show extends Component {
                   key={torrent.label}>{torrent.label}</Button>
               ))}
             </div>
-            <Button main>
-              <Icon style={{marginRight: 4}} icon="arrow_forward" size="1em" />
-              Siguiente episodio
-            </Button>
+            {nextEpLink && (
+              <Link to={nextEpLink}>
+                <Button main>
+                  <Icon style={{marginRight: 4}} icon="arrow_forward" size="1em" />
+                  Siguiente episodio
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         <div className="subtitles">
