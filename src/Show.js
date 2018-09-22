@@ -18,7 +18,7 @@ const ShowStyle = styled.main`
   .layout {
     display: flex;
     align-items: flex-start;
-    padding: 0 8px;
+    padding: 0 ${theme.spaces[2]}px;
   }
   .poster {
     max-width: 100%;

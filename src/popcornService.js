@@ -20,7 +20,7 @@ export default {
     this.socket = io(api + '/');
     this.apiurl = api;
     this.socket.on('connect', () => {
-      console.log("> torrentClient connected to Palomitas Downloader")
+      console.log("connected to Palomitas Downloader socket")
     })
     this.socket.on('destroyed', (hash) => this.deleteTorrent(hash))
     this.fetchAllTorrents()
@@ -62,7 +62,7 @@ export default {
 
   loadMagnet(magnet) {
     if (!this.socket) {
-      throw new Error('Socket is not connected. You must call torrentClient.initSocket(url) first');
+      throw new Error('Socket is not connected. You must call the "init" method with an url first');
     }
     this.targetHash = parseMagnet(magnet).infoHash;
     return new Promise((resolve, reject) => {
