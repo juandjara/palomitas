@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import Select from 'react-select';
+import React, {Component, Fragment} from 'react';
 import config from './config';
 import theme from './theme';
 import styled from 'styled-components';
@@ -7,41 +6,42 @@ import Spinner from './Spinner';
 import Icon from './Icon';
 
 const SubtitleStyle = styled.div`
-  margin-top: ${theme.spaces[3]}px;
-  label {
-    display: block;
-    margin-bottom: ${theme.spaces[2]}px;
-  }
-  .select {
-    color: ${theme.colors.black4};
-    width: 200px;
-  }
-  ul {
-    margin-top: ${theme.spaces[3]}px;
-    .material-icons {
-      margin-right: ${theme.spaces[3]}px;
-      margin-bottom: ${theme.spaces[3]}px;
-    }
-    p {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+  position: relative;
+  .popup {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    border: 1px solid ${theme.colors.black4};
+    background: ${theme.colors.black3};
+    color: white;
+    max-height: 200px;
+    min-width: 140px;
+    overflow-y: auto;
+    text-align: left;
+    padding: 4px 0;
+    li {
+      font-size: 12px;
+      font-weight: 600;
+      font-family: sans-serif;
+      padding: 6px 4px;
+      &.selected, &:hover {
+        color: ${theme.colors.black2};
+        background: ${theme.colors.grey1};
+      }
     }
   }
 `;
 
 class SubtitleSelector extends Component {
-  state = {
-    loading: false,
-    selectedLang: config.sublangs.find(s => s.value === 'es'),
-    subtitles: {}
-  }
+  state = { loading: false }
 
   componentDidMount() {
     this.fetchSubtitles();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const sameProps = prevProps.episode === this.props.episode &&
       prevProps.season === this.props.season &&
       prevProps.id === this.props.id;
@@ -51,37 +51,94 @@ class SubtitleSelector extends Component {
   }
 
   fetchSubtitles() {
-    this.setState({loading: true, subtitles: {}})
+    this.emitSubtitles([]);
+    this.setState({loading: true})
     const {id, episode, season} = this.props;
     const url = `${config.subtitleApi}/search?imdbid=${id}&season=${season}&episode=${episode}`;
     fetch(url).then(res => res.json())
     .then(data => {
-      this.setState({loading: false, subtitles: data});
+      const subtitles = this.processSubtitles(data);
+      this.setState({loading: false});
+      this.emitSubtitles(subtitles);
     })
+  }
+  
+  processSubtitles(data) {
+    return Object.keys(data)
+    .reduce((acum, key) => {
+      const elem = data[key];
+      const newSubs = elem.map((subs, index) => ({
+        id: subs.id,
+        label: `${subs.lang} ${index > 0 ? index + 1 : ''}`,
+        langcode: subs.langcode,
+        url: subs.links.vtt
+      }));
+      return acum.concat(newSubs);
+    }, []).sort((a,b) => {
+      if (a.label > b.label) {
+        return 1;
+      }
+      if (a.label < b.label) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
+  openPopup = () => {
+    this.setState({popupOpen: true});
+    setTimeout(() => {
+      window.addEventListener('click', this.closePopup);    
+    }, 100);
+  }
+
+  closePopup = () => {
+    this.setState({popupOpen: false});
+    window.removeEventListener('click', this.closePopup);
+  }
+
+  emitSelection(id) {
+    if (typeof this.props.subtitlesSelected === 'function') {
+      this.props.subtitlesSelected(id);
+    }
+  }
+
+  emitSubtitles(subtitles) {
+    if (typeof this.props.subtitlesLoaded === 'function') {
+      this.props.subtitlesLoaded(subtitles);
+    }
   }
 
   render() {
-    const {subtitles, selectedLang} = this.state;
-    const subs = subtitles[selectedLang.value] || [];
+    const {subtitles, selectedTrack} = this.props;
     return (
-      <SubtitleStyle>
-        <label>Idioma: </label>
-        <Select 
-          className="select"
-          value={this.state.selectedLang}
-          options={config.sublangs}
-          onChange={val => this.setState({selectedLang: val})}
+      <SubtitleStyle 
+        className="video-react-control video-react-button">
+        <Icon
+          onClick={() => this.openPopup()}
+          role="button"
+          tabIndex="0"
+          icon="subtitles"
+          style={{cursor: 'pointer', fontSize: 18, lineHeight: '30px'}}
         />
-        {this.state.loading && <Spinner />}
-        <ul>
-          {subs.map(sub => (
-            <li key={sub.id}>
-              <Icon icon="play_arrow" size={24} />
-              <Icon icon="save_alt" size={24} />
-              <p>{sub.filename}</p>
-            </li>
-          ))}
-        </ul>
+        {this.state.popupOpen && (
+          <ul className="popup">
+            {this.state.loading ? 
+              <Spinner /> : 
+              <Fragment>
+                {subtitles.map(subs => (
+                  <li
+                    className={selectedTrack === subs.id ? 'selected' : ''}
+                    onClick={() => this.emitSelection(subs.id)}
+                    key={subs.id}>
+                    {subs.label}
+                  </li>
+                ))}
+                <li onClick={() => this.emitSelection(null)}>Disabled</li>
+              </Fragment>
+            }
+          </ul>
+        )}
       </SubtitleStyle>
     )
   }

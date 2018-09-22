@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import { BigPlayButton, Player } from 'video-react';
+import { BigPlayButton, Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
 import config from './config';
 import popcornService from './popcornService';
 import Button from './Button';
 import Icon from './Icon';
 import styled from 'styled-components';
+import SubtitleSelector from './SubtitleSelector';
+import DownloadButton from './DownloadButton';
 
 const VideoStyles = styled.div`
   .video-react {
@@ -45,7 +47,9 @@ const LoadingStyles = styled.div`
 class MagnetPlayer extends Component {
   state = {
     loading: false,
-    videoUrl: null
+    videoUrl: null,
+    subtitles: [],
+    selectedTrack: null
   }
 
   componentDidMount() {
@@ -81,8 +85,23 @@ class MagnetPlayer extends Component {
     })
   }
 
+  renderSubtitles() {
+    const {subtitles, selectedTrack} = this.state;
+    const subs = subtitles.find(s => s.id === selectedTrack);
+    return subs && (
+      <track
+        default={true}
+        kind="subtitles"
+        label={subs.label}
+        srcLang={subs.langcode}
+        src={`https://${subs.url}`}
+      />
+    );
+  }
+
   render() {
-    if (!this.state.videoUrl ) {
+    const {videoUrl, subtitles, selectedTrack} = this.state;
+    if (!videoUrl ) {
       return (
         <LoadingStyles>
           <Button className="play-btn" onClick={() => this.loadVideo()}>
@@ -97,14 +116,21 @@ class MagnetPlayer extends Component {
           aspectRatio="16:9"
           crossOrigin="anonymous">
           <BigPlayButton className="play-btn" position="center" />
+          <ControlBar>
+            <SubtitleSelector 
+              {...this.props.subtitleProps}
+              subtitles={subtitles}
+              selectedTrack={selectedTrack}
+              subtitlesLoaded={subtitles => this.setState({subtitles})}
+              subtitlesSelected={subtitles => this.setState({selectedTrack: subtitles})}
+              order={7}
+            />
+            <DownloadButton order={7} />
+          </ControlBar>
           <source src={this.state.videoUrl} />
           <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
+          {this.renderSubtitles()}
         </Player>
-        <p>
-          <a download href={this.state.videoUrl}>
-            Descargar video
-          </a>
-        </p>
       </VideoStyles>
     )
   }

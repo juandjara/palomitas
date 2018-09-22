@@ -7,7 +7,6 @@ import Spinner from './Spinner';
 import theme from './theme';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
-import SubtitleSelector from './SubtitleSelector';
 import MagnetPlayer from './MagnetPlayer';
 
 const ShowStyle = styled.main`
@@ -312,7 +311,14 @@ class Show extends Component {
               </Link>
             )}
           </div>
-        <MagnetPlayer magnet={this.state.selectedTorrent.url} />
+        <MagnetPlayer 
+          magnet={this.state.selectedTorrent.url}
+          subtitleProps={{
+            id: this.state.show._id,
+            episode: ep.episode,
+            season: ep.season
+          }}
+        />
       </SelectedEpSection>
     );
   }

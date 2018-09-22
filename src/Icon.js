@@ -1,10 +1,12 @@
 import React from 'react';
 
-const Icon = ({icon, size, className = '', style = {}, ...props}) => (
+const Icon = ({icon, size, className = '', style = {}, onClick, role, tabIndex}) => (
   <i 
     className={`material-icons ${className}`}
     style={{fontSize: size, ...style}}
-    {...props}>
+    onClick={onClick}
+    role={role}
+    tabIndex={tabIndex}>
     {icon}
   </i>
 );
