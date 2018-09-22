@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import Icon from './Icon';
 import Button from './Button';
 import styled from 'styled-components';
@@ -8,16 +8,17 @@ import theme from './theme';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import SubtitleSelector from './SubtitleSelector';
+import MagnetPlayer from './MagnetPlayer';
 
 const ShowStyle = styled.main`
-  padding: 8px;
   > button {
-    margin: 0;
+    margin: 8px;
     margin-bottom: ${theme.spaces[2]}px;
   }
   .layout {
     display: flex;
     align-items: flex-start;
+    padding: 0 8px;
   }
   .poster {
     max-width: 100%;
@@ -34,11 +35,18 @@ const ShowStyle = styled.main`
       font-weight: bold;
     }
     .synopsis {
-      margin: ${theme.spaces[5]}px 0;
+      margin: ${theme.spaces[4]}px 0;
       line-height: 1.5;
       max-width: 768px;
       text-align: justify;
     }
+  }
+  footer {
+    text-align: right;
+    margin-top: 1em;
+    padding: 1em;
+    color: white;
+    background-color: ${theme.colors.black3};
   }
 `;
 
@@ -83,6 +91,10 @@ const EpisodeList = styled.section`
     &:hover {
       background-color: ${theme.colors.grey1};
     }
+    &.selected {
+      background-color: ${theme.colors.grey1};
+      pointer-events: none;
+    }
     a {
       display: block;
       padding: ${theme.spaces[3]}px ${theme.spaces[2]}px;
@@ -91,9 +103,7 @@ const EpisodeList = styled.section`
 `;
 
 const SelectedEpSection = styled.section`
-  margin-top: ${theme.spaces[4]}px;
-  display: flex;
-  align-items: flex-start;
+  margin-top: ${theme.spaces[6]}px;
   .subtitles {
     flex: 0 0 300px;
     margin-left: ${theme.spaces[3]}px;
@@ -138,11 +148,10 @@ class Show extends Component {
   componentDidUpdate(prevProps, prevState) {
     const oldSearch = prevProps.location.search;
     const search = this.props.location.search;
-    if (oldSearch === search || !this.state.seasons.length) {
-      return;
-    }
     const epNumber = this.getEpNumber(this.props);
-    this.selectEpisode(epNumber);
+    if (epNumber && oldSearch !== search && this.state.seasons.length > 0) {
+      this.selectEpisode(epNumber);
+    }
   }
 
   fetchShow() {
@@ -232,37 +241,41 @@ class Show extends Component {
   renderShow() {
     const {show, seasons, selectedSeason, selectedEpisode} = this.state;
     return (
-      <div className="layout">
-        <EpisodeList>
-          <img className="poster" alt="poster" src={show.images.poster} />
-          <Select className="select" 
-            value={selectedSeason} 
-            options={seasons}
-            onChange={this.selectSeason} />
-          <ul>
-            {selectedSeason.episodes.map(ep => (
-              <li key={ep.tvdb_id}>
-                <Link to={this.makeEpisodeLink(ep)}>                
-                  <span className="number">{this.formatEpisodeNumber(ep)}</span>
-                  <span>{ep.title}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </EpisodeList>
-        <div>
-          <section className="info">
-            <h1>{show.title}</h1>
-            <p>{show.rating.percentage / 10} / 10</p>
-            <p className="status">{show.year} - {show.status}</p>
-            <Genres>
-              {show.genres.map(genre => <span key={genre}>{genre}</span>)}
-            </Genres>
-            <p className="synopsis">{show.synopsis}</p>
-          </section>
-          {selectedEpisode && this.renderSelectedEpisode()}
+      <Fragment>
+        <div className="layout">
+          <EpisodeList>
+            <img className="poster" alt="poster" src={show.images.poster} />
+            <Select className="select" 
+              value={selectedSeason} 
+              options={seasons}
+              onChange={this.selectSeason} />
+            <ul>
+              {selectedSeason.episodes.map(ep => (
+                <li key={ep.tvdb_id} 
+                  className={selectedEpisode && ep.episode === selectedEpisode.episode ? 'selected' : ''}>
+                  <Link to={this.makeEpisodeLink(ep)}>                
+                    <span className="number">{this.formatEpisodeNumber(ep)}</span>
+                    <span>{ep.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </EpisodeList>
+          <div>
+            <section className="info">
+              <h1>{show.title}</h1>
+              <p>{show.rating.percentage / 10} / 10</p>
+              <p className="status">{show.year} - {show.status}</p>
+              <Genres>
+                {show.genres.map(genre => <span key={genre}>{genre}</span>)}
+              </Genres>
+              <p className="synopsis">{show.synopsis}</p>
+            </section>
+            {selectedEpisode && this.renderSelectedEpisode()}
+          </div>
         </div>
-      </div>
+        <footer>Palomitas v4. 2018</footer>
+      </Fragment>
     )
   }
 
@@ -275,11 +288,10 @@ class Show extends Component {
     .map(key => ({label: key, ...ep.torrents[key]}));
     return (
       <SelectedEpSection>
-        <div className="info">
-          <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
-          <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
-          <p className="overview">{ep.overview}</p>
-          <div className="actions">
+        <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
+        <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
+        <p className="overview">{ep.overview}</p>
+        <div className="actions">
             <div className="quality-selector">
               <label>Calidad: </label>
               {torrents.map(torrent => (
@@ -300,11 +312,7 @@ class Show extends Component {
               </Link>
             )}
           </div>
-        </div>
-        <div className="subtitles">
-          <h2>Subtitulos</h2>
-          <SubtitleSelector />
-        </div>
+        <MagnetPlayer magnet={this.state.selectedTorrent.url} />
       </SelectedEpSection>
     );
   }

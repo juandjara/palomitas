@@ -2,7 +2,7 @@ const primaryColor = 'rgb(0, 136, 238)';
 
 export default {
   fontSizes: [16, 18, 20, 24, 32],
-  spaces: [0, 4, 8, 16, 24, 32, 64],
+  spaces: [0, 4, 8, 16, 24, 32, 48, 64],
   breakpoints: ['600px'],
   textShadow: '0 4px 4px rgba(0,0,0,.5)',
   colors: {

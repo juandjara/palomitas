@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "magnet-uri": "^5.2.4",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-headroom": "^2.2.2",
@@ -11,7 +12,9 @@
     "react-select": "^2.0.0",
     "react-waypoint": "^8.0.3",
     "rebass": "^3.0.0-4",
-    "styled-components": "^3.4.6"
+    "socket.io-client": "^2.1.1",
+    "styled-components": "^3.4.6",
+    "video-react": "^0.13.0"
   },
   "scripts": {
     "start": "react-scripts start",
