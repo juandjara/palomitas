@@ -22,7 +22,7 @@ export default {
     this.socket.on('connect', () => {
       console.log("Connected to Palomitas Downloader websocket")
     })
-    this.socket.on('destroyed', (hash) => this.deleteTorrent(hash))
+    this.socket.on('destroyed', (hash) => this.removeTorrent(hash))
     this.fetchAllTorrents()
   },
 
@@ -42,7 +42,7 @@ export default {
     if(this.targetHash !== hash) {
       return;
     }
-    
+    this.socket.off('interested');
     return fetch(`${this.apiurl}/torrents/${hash}`)
     .then(res => res.json())
     .then(data => data.files)
@@ -72,12 +72,12 @@ export default {
         .catch(reject)
       } else {
         this.postTorrent(magnet).catch(reject);
-        this.socket.once(
+        this.socket.on(
           'interested',
           (hash) => {
             this.fetchTorrentFiles(hash)
             .then(resolve)
-            .catch(reject)
+            .catch(reject);
           }
         )
       }
