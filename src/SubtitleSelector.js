@@ -7,6 +7,11 @@ import Icon from './Icon';
 
 const SubtitleStyle = styled.div`
   position: relative;
+  .material-icons {
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 30px;
+  }
   .popup {
     position: absolute;
     bottom: 100%;
@@ -60,6 +65,10 @@ class SubtitleSelector extends Component {
       const subtitles = this.processSubtitles(data);
       this.setState({loading: false});
       this.emitSubtitles(subtitles);
+      const subs_es = subtitles.find(s => s.langcode === 'es');
+      const subs_en = subtitles.find(s => s.langcode === 'en');
+      const defaultSelection = subs_es ? subs_es.id : subs_en && subs_en.id;
+      this.emitSelection(defaultSelection);
     })
   }
   
@@ -114,13 +123,16 @@ class SubtitleSelector extends Component {
     return (
       <SubtitleStyle 
         className="video-react-control video-react-button">
-        <Icon
-          onClick={() => this.openPopup()}
-          role="button"
-          tabIndex="0"
-          icon="subtitles"
-          style={{cursor: 'pointer', fontSize: 18, lineHeight: '30px'}}
-        />
+        {this.state.loading ? (
+          <Icon icon="refresh" />
+        ) : (
+          <Icon
+            onClick={() => this.openPopup()}
+            role="button"
+            tabIndex="0"
+            icon="subtitles"
+          />
+        )}
         {this.state.popupOpen && (
           <ul className="popup">
             {this.state.loading ? 
