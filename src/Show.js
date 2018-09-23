@@ -17,12 +17,25 @@ const ShowStyle = styled.main`
     display: flex;
     align-items: flex-start;
     padding: 0 ${theme.spaces[2]}px;
+    @media (max-width: 768px) {
+      flex-direction: column-reverse;
+    }
   }
-  .content {
-    margin-top: ${theme.spaces[6]}px;
+  @media (min-width: 768px) {
+    .content {
+      margin-top: ${theme.spaces[6]}px;
+    }
   }
-  .poster {
+  .poster, .fanart {
     max-width: 100%;
+  }
+  .fanart {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .fanart {
+      display: block;
+    }
   }
   .info {
     h1 {
@@ -106,6 +119,11 @@ const EpisodeList = styled.section`
       padding: ${theme.spaces[3]}px ${theme.spaces[2]}px;
     }
   }
+  @media (max-width: 768px) {
+    > img, .back-btn {
+      display: none;
+    }
+  }
 `;
 
 const SelectedEpSection = styled.section`
@@ -133,6 +151,9 @@ const SelectedEpSection = styled.section`
     justify-content: space-between;
     margin-top: ${theme.spaces[5]}px;
     margin-bottom: ${theme.spaces[2]}px;
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
   }
 `;
 
@@ -279,6 +300,7 @@ class Show extends Component {
             </ul>
           </EpisodeList>
           <div className="content">
+            <img className="fanart" alt="fanart" src={show.images.fanart} />
             <section className="info">
               <h1>{show.title}</h1>
               <p>{show.rating.percentage / 10} / 10</p>
