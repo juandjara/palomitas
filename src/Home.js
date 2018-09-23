@@ -20,6 +20,9 @@ const Grid = styled.section`
   @media (max-width: 650px) {
     grid-template-columns: repeat(2, auto);
   }
+  @media (max-width: 420px) {
+    display: block;
+  }
   
   .show {
     display: block;
