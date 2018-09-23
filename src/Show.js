@@ -10,14 +10,16 @@ import { Link } from 'react-router-dom';
 import MagnetPlayer from './MagnetPlayer';
 
 const ShowStyle = styled.main`
-  > button {
-    margin: 8px;
-    margin-bottom: ${theme.spaces[2]}px;
+  .back-btn {
+    margin: 8px 0;
   }
   .layout {
     display: flex;
     align-items: flex-start;
     padding: 0 ${theme.spaces[2]}px;
+  }
+  .content {
+    margin-top: ${theme.spaces[6]}px;
   }
   .poster {
     max-width: 100%;
@@ -67,11 +69,16 @@ const Genres = styled.p`
 const EpisodeList = styled.section`
   max-width: 300px;
   flex: 0 0 auto;
-  margin-right: ${theme.spaces[3]}px;
+  margin-right: ${theme.spaces[4]}px;
   .select {
     color: ${theme.colors.black4};
     width: 180px;
     margin: ${theme.spaces[3]}px 0;
+  }
+  ul {
+    border-radius: 4px;
+    max-height: 360px;
+    overflow-y: auto;
   }
   li {
     color: ${theme.colors.black4};
@@ -103,6 +110,7 @@ const EpisodeList = styled.section`
 
 const SelectedEpSection = styled.section`
   margin-top: ${theme.spaces[6]}px;
+  flex: 
   .subtitles {
     flex: 0 0 300px;
     margin-left: ${theme.spaces[3]}px;
@@ -127,6 +135,15 @@ const SelectedEpSection = styled.section`
     margin-bottom: ${theme.spaces[2]}px;
   }
 `;
+
+const BackButton = () => (
+  <Link to="/">
+    <Button main className="back-btn">
+      <Icon style={{marginRight: 4, marginBottom: 2}} icon="arrow_back" size="1em" />
+      Volver
+    </Button>
+  </Link>
+)
 
 class Show extends Component {
   state = {
@@ -191,7 +208,7 @@ class Show extends Component {
   selectEpisode(epNumber) {
     const season = this.state.seasons.find(s => s.value === epNumber.season);
     const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
-    const torrent = episode.torrents['720p'] || episode.torrents[0];
+    const torrent = episode.torrents[0];
     this.setState({
       selectedSeason: season,
       selectedEpisode: episode,
@@ -241,8 +258,9 @@ class Show extends Component {
     const {show, seasons, selectedSeason, selectedEpisode} = this.state;
     return (
       <Fragment>
-        <div className="layout">
+        <div className="layout" style={{maxWidth: 1100, margin: '0 auto', flex: '1 0 auto'}}>
           <EpisodeList>
+            <BackButton />
             <img className="poster" alt="poster" src={show.images.poster} />
             <Select className="select" 
               value={selectedSeason} 
@@ -260,7 +278,7 @@ class Show extends Component {
               ))}
             </ul>
           </EpisodeList>
-          <div>
+          <div className="content">
             <section className="info">
               <h1>{show.title}</h1>
               <p>{show.rating.percentage / 10} / 10</p>
@@ -291,26 +309,26 @@ class Show extends Component {
         <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
         <p className="overview">{ep.overview}</p>
         <div className="actions">
-            <div className="quality-selector">
-              <label>Calidad: </label>
-              {torrents.map(torrent => (
-                <Button 
-                  style={{opacity: 1}}
-                  disabled={torrent.url === selectedTorrent.url}
-                  main={torrent.url === selectedTorrent.url} 
-                  onClick={() => this.setState({selectedTorrent: torrent})}
-                  key={torrent.label}>{torrent.label}</Button>
-              ))}
-            </div>
-            {nextEpLink && (
-              <Link to={nextEpLink}>
-                <Button main>
-                  <Icon style={{marginRight: 4}} icon="arrow_forward" size="1em" />
-                  Siguiente episodio
-                </Button>
-              </Link>
-            )}
+          <div className="quality-selector">
+            <label>Calidad: </label>
+            {torrents.map(torrent => (
+              <Button 
+                style={{opacity: 1}}
+                disabled={torrent.url === selectedTorrent.url}
+                main={torrent.url === selectedTorrent.url} 
+                onClick={() => this.setState({selectedTorrent: torrent})}
+                key={torrent.label}>{torrent.label}</Button>
+            ))}
           </div>
+          {nextEpLink && (
+            <Link to={nextEpLink}>
+              <Button main>
+                <Icon style={{marginRight: 4}} icon="arrow_forward" size="1em" />
+                Siguiente episodio
+              </Button>
+            </Link>
+          )}
+        </div>
         <MagnetPlayer 
           magnet={this.state.selectedTorrent.url}
           subtitleProps={{
@@ -324,15 +342,30 @@ class Show extends Component {
   }
 
   render() {
+    const loadingContent = (
+      <Fragment>
+        <BackButton />
+        <Spinner />
+      </Fragment>
+    )
     return (
       <ShowStyle>
-        <Button main onClick={() => this.goBack()}>
-          <Icon style={{marginRight: 4, marginBottom: 2}} icon="arrow_back" size="1em" />
-          Volver
-        </Button>
+        {this.state.loading ? loadingContent : this.renderShow()}
+      </ShowStyle>
+    )
+    /*
+    return (
+      <ShowStyle>
+        <Link to="/">
+          <Button main className="back-btn">
+            <Icon style={{marginRight: 4, marginBottom: 2}} icon="arrow_back" size="1em" />
+            Volver
+          </Button>
+        </Link>
         {this.state.loading ? <Spinner /> : this.renderShow()}
       </ShowStyle>
     );
+    */
   }
 }
 

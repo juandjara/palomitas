@@ -113,6 +113,7 @@ class MagnetPlayer extends Component {
     return (
       <VideoStyles>
         <Player autoPlay controls fluid 
+          src={this.state.videoUrl}
           aspectRatio="16:9"
           crossOrigin="anonymous">
           <BigPlayButton className="play-btn" position="center" />
@@ -127,8 +128,8 @@ class MagnetPlayer extends Component {
             />
             <DownloadButton order={7} />
           </ControlBar>
-          <source src={this.state.videoUrl} />
-          <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
+          {/* <source src={this.state.videoUrl} /> */}
+          {/* <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" /> */}
           {this.renderSubtitles()}
         </Player>
       </VideoStyles>

@@ -20,7 +20,7 @@ export default {
     this.socket = io(api + '/');
     this.apiurl = api;
     this.socket.on('connect', () => {
-      console.log("connected to Palomitas Downloader socket")
+      console.log("Connected to Palomitas Downloader websocket")
     })
     this.socket.on('destroyed', (hash) => this.deleteTorrent(hash))
     this.fetchAllTorrents()

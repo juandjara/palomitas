@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Headroom from 'react-headroom';
 import Icon from './Icon';
 import theme from './theme';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 const HeaderStyle = styled.header`
   display: flex;
@@ -12,6 +12,11 @@ const HeaderStyle = styled.header`
   padding: 8px;
   color: white;
   background-color: ${theme.colors.black2};
+  > a {
+    display: flex;
+    color: inherit;
+    align-items: center;
+  }
   .logo {
     height: 44px;
     margin-right: 8px;
@@ -57,8 +62,10 @@ class Header extends React.Component {
     return (
       <Headroom>
         <HeaderStyle>
-          <img alt="logo" className="logo" src="/palomitas-outline.png"></img>
-          <h2>Palomitas</h2>
+          <Link to="/">
+            <img alt="logo" className="logo" src="/palomitas-outline.png"></img>
+            <h2>Palomitas</h2>
+          </Link>
           <div style={{flexGrow: 1}}></div>
           <div className="search-box">
             <input 
