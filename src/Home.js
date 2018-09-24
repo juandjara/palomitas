@@ -150,6 +150,7 @@ class Home extends Component {
     return (
       <Fragment>
         <HomeHeading />
+        <h2 style={{paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
         <LastWatched />
         <div style={{padding: 8}}>
           <SelectWrapper>
