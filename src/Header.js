@@ -47,6 +47,7 @@ const HeaderStyle = styled.header`
 `;
 
 class Header extends React.Component {
+  inputNode = null
   state = {
     search: ''
   }
@@ -56,6 +57,9 @@ class Header extends React.Component {
   handleKeyUp = (ev) => {
     if (ev.which === 13) {
       this.props.history.push(`/home?search=${this.state.search}`);
+      if (this.inputNode) {
+        this.inputNode.blur();
+      }
     }
   }
   render() {
@@ -68,7 +72,8 @@ class Header extends React.Component {
           </Link>
           <div style={{flexGrow: 1}}></div>
           <div className="search-box">
-            <input 
+            <input
+              ref={node => this.inputNode = node}
               value={this.state.search}
               onChange={this.handleSearch}
               onKeyUp={this.handleKeyUp}

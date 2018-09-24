@@ -35,6 +35,7 @@ const ShowStyle = styled.main`
   }
   @media (max-width: 768px) {
     .fanart {
+      margin-top: 8px;
       display: block;
     }
   }
@@ -60,13 +61,19 @@ const ShowStyle = styled.main`
 
 const Genres = styled.p`
   margin: ${theme.spaces[2]}px 0;
+  max-width: 100vw;
+  display: flex;
+  flex-wrap: wrap;
   span {
+    display: block;
     font-size: 12px;
     font-weight: 600;
-    line-height: 4px;
+    line-height: 14px;
+    margin-top: 2px;
     padding: 2px 6px;
     border-radius: 2px;
     background-color: ${theme.colors.primary};
+    white-space: nowrap;
     & + span {
       margin-left: ${theme.spaces[2]}px;
     }
@@ -122,7 +129,7 @@ const EpisodeList = styled.section`
 
 const SelectedEpSection = styled.section`
   margin-top: ${theme.spaces[6]}px;
-  flex: 
+  flex:
   .subtitles {
     flex: 0 0 300px;
     margin-left: ${theme.spaces[3]}px;
@@ -277,15 +284,15 @@ class Show extends Component {
           <EpisodeList>
             <BackButton />
             <img className="poster" alt="poster" src={show.images.poster} />
-            <Select className="select" 
-              value={selectedSeason} 
+            <Select className="select"
+              value={selectedSeason}
               options={seasons}
               onChange={this.selectSeason} />
             <ul>
               {selectedSeason.episodes.map(ep => (
-                <li key={ep.tvdb_id} 
+                <li key={ep.tvdb_id}
                   className={selectedEpisode && ep.episode === selectedEpisode.episode ? 'selected' : ''}>
-                  <Link to={this.makeEpisodeLink(ep)}>                
+                  <Link to={this.makeEpisodeLink(ep)}>
                     <span className="number">{this.formatEpisodeNumber(ep)}</span>
                     <span>{ep.title}</span>
                   </Link>
@@ -328,10 +335,10 @@ class Show extends Component {
           <div className="quality-selector">
             <label>Calidad: </label>
             {torrents.map(torrent => (
-              <Button 
+              <Button
                 style={{opacity: 1}}
                 disabled={torrent.url === selectedTorrent.url}
-                main={torrent.url === selectedTorrent.url} 
+                main={torrent.url === selectedTorrent.url}
                 onClick={() => this.setState({selectedTorrent: torrent})}
                 key={torrent.label}>{torrent.label}</Button>
             ))}
@@ -345,7 +352,7 @@ class Show extends Component {
             </Link>
           )}
         </div>
-        <MagnetPlayer 
+        <MagnetPlayer
           magnet={this.state.selectedTorrent.url}
           episodeData={{
             id: this.state.show._id,
