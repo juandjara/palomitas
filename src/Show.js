@@ -129,7 +129,8 @@ const EpisodeList = styled.section`
 
 const SelectedEpSection = styled.section`
   margin-top: ${theme.spaces[6]}px;
-  flex:
+  width: 768px;
+  max-width: calc(100vw - 16px);
   .subtitles {
     flex: 0 0 300px;
     margin-left: ${theme.spaces[3]}px;
