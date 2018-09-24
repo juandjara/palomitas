@@ -26,7 +26,7 @@ const Grid = styled.section`
   @media (max-width: 420px) {
     display: block;
   }
-  
+
   .show {
     display: block;
     position: relative;
@@ -156,6 +156,7 @@ class Home extends Component {
           <SelectWrapper>
             <label htmlFor="sort">Ordenar por</label>
             <Select
+              isSearchable={false}
               value={sort}
               options={config.sortOptions}
               onChange={this.handleSortChange}
@@ -171,7 +172,7 @@ class Home extends Component {
             </Link>
           ))}
         </Grid>
-        {loading ? 
+        {loading ?
           <Spinner /> :
           <div style={{height: 1}}>
             <Waypoint scrollableAncestor={window} onEnter={this.handleNextPage} />

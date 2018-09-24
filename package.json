@@ -20,6 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "copy": "cp build/index.html build/200.html",
+    "surge": "surge build palomitas.fuken.xyz",
+    "deploy": "npm run build && npm run copy && npm run surge"
   }
 }

@@ -285,6 +285,7 @@ class Show extends Component {
             <BackButton />
             <img className="poster" alt="poster" src={show.images.poster} />
             <Select className="select"
+              isSearchable={false}
               value={selectedSeason}
               options={seasons}
               onChange={this.selectSeason} />
