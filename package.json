@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "magnet-uri": "^5.2.4",
+    "magnet-uri": "^5.1.8",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-headroom": "^2.2.2",
