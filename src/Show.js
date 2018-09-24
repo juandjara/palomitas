@@ -8,6 +8,7 @@ import theme from './theme';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import MagnetPlayer from './MagnetPlayer';
+import Footer from './Footer';
 
 const ShowStyle = styled.main`
   .back-btn {
@@ -54,13 +55,6 @@ const ShowStyle = styled.main`
       max-width: 768px;
       text-align: justify;
     }
-  }
-  footer {
-    text-align: right;
-    margin-top: 1em;
-    padding: 1em;
-    color: white;
-    background-color: ${theme.colors.black3};
   }
 `;
 
@@ -313,7 +307,7 @@ class Show extends Component {
             {selectedEpisode && this.renderSelectedEpisode()}
           </div>
         </div>
-        <footer>Palomitas v4. 2018</footer>
+        <Footer>Palomitas v4. 2018</Footer>
       </Fragment>
     )
   }
@@ -353,10 +347,13 @@ class Show extends Component {
         </div>
         <MagnetPlayer 
           magnet={this.state.selectedTorrent.url}
-          subtitleProps={{
+          episodeData={{
             id: this.state.show._id,
+            image: this.state.show.images.fanart,
+            show_title: this.state.show.title,
+            ep_title: ep.title,
             episode: ep.episode,
-            season: ep.season
+            season: ep.season,
           }}
         />
       </SelectedEpSection>
@@ -375,19 +372,6 @@ class Show extends Component {
         {this.state.loading ? loadingContent : this.renderShow()}
       </ShowStyle>
     )
-    /*
-    return (
-      <ShowStyle>
-        <Link to="/">
-          <Button main className="back-btn">
-            <Icon style={{marginRight: 4, marginBottom: 2}} icon="arrow_back" size="1em" />
-            Volver
-          </Button>
-        </Link>
-        {this.state.loading ? <Spinner /> : this.renderShow()}
-      </ShowStyle>
-    );
-    */
   }
 }
 

@@ -19,6 +19,15 @@ const Button = styled.button`
     opacity: 0.5;
     pointer-events: none;
   ` : ''}
+  ${props => props.clear ? `
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    &:focus {
+      background: rgba(255,255,255, 0.2);
+    }
+  ` : ''}
 `;
 
 export default Button;

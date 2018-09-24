@@ -7,18 +7,21 @@ import Spinner from './Spinner';
 import Waypoint from 'react-waypoint';
 import { Link } from 'react-router-dom';
 import config from './config';
+import LastWatched from './LastWatched';
+import Footer from './Footer';
 
 const Grid = styled.section`
+  flex-grow: 1;
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: ${theme.spaces[1]}px ${theme.spaces[2]}px;
   max-width: 100vw;
   padding: ${theme.spaces[2]}px;
   @media (max-width: 900px) {
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 650px) {
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: repeat(2, 1fr);
   }
   @media (max-width: 420px) {
     display: block;
@@ -147,6 +150,7 @@ class Home extends Component {
     return (
       <Fragment>
         <HomeHeading />
+        <LastWatched />
         <div style={{padding: 8}}>
           <SelectWrapper>
             <label htmlFor="sort">Ordenar por</label>
@@ -172,6 +176,7 @@ class Home extends Component {
             <Waypoint scrollableAncestor={window} onEnter={this.handleNextPage} />
           </div>
         }
+        <Footer>Palomitas v4. 2018</Footer>
       </Fragment>
     );
   }

@@ -8,6 +8,7 @@ import Icon from './Icon';
 import styled from 'styled-components';
 import SubtitleSelector from './SubtitleSelector';
 import DownloadButton from './DownloadButton';
+import { updateWatchedEpisodes } from './lastWatchedService';
 
 const VideoStyles = styled.div`
   .video-react {
@@ -79,6 +80,7 @@ class MagnetPlayer extends Component {
       this.setState({
         videoUrl: `${config.downloaderApi}${biggestFile.link}`
       })
+      updateWatchedEpisodes(this.props.episodeData);
     }).catch(err => {
       console.error(err);
       window.alert('Algo ha fallado :c');
@@ -119,7 +121,7 @@ class MagnetPlayer extends Component {
           <BigPlayButton className="play-btn" position="center" />
           <ControlBar>
             <SubtitleSelector 
-              {...this.props.subtitleProps}
+              {...this.props.episodeData}
               subtitles={subtitles}
               selectedTrack={selectedTrack}
               subtitlesLoaded={subtitles => this.setState({subtitles})}
