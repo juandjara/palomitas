@@ -124,7 +124,7 @@ class SubtitleSelector extends Component {
       <SubtitleStyle 
         className="video-react-control video-react-button">
         {this.state.loading ? (
-          <Icon icon="refresh" />
+          <Icon icon="subtitles" style={{opacity: 0.5}} />
         ) : (
           <Icon
             onClick={() => this.openPopup()}
