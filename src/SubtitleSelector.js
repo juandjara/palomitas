@@ -122,6 +122,7 @@ class SubtitleSelector extends Component {
     const {subtitles, selectedTrack} = this.props;
     return (
       <SubtitleStyle 
+        title="Subtitulos"
         className="video-react-control video-react-button">
         {this.state.loading ? (
           <Icon icon="subtitles" style={{opacity: 0.5}} />

@@ -2,7 +2,8 @@ import React from 'react';
 
 function DownloadButton({className = '', player}) {
   return (
-    <a
+    <button
+      title="Descargar video"
       className={`${className} video-react-control video-react-button`}
       href={player.currentSrc}
       download
