@@ -40,10 +40,16 @@ const SubtitleStyle = styled.div`
 `;
 
 class SubtitleSelector extends Component {
+  mounted = false;
   state = { loading: false }
 
   componentDidMount() {
+    this.mounted = true;
     this.fetchSubtitles();
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   componentDidUpdate(prevProps) {
@@ -56,6 +62,9 @@ class SubtitleSelector extends Component {
   }
 
   fetchSubtitles() {
+    if (!this.mounted) {
+      return;
+    }
     this.emitSubtitles([]);
     this.setState({loading: true})
     const {id, episode, season} = this.props;
