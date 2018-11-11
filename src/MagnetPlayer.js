@@ -7,7 +7,6 @@ import Button from './Button';
 import Icon from './Icon';
 import styled from 'styled-components';
 import SubtitleSelector from './SubtitleSelector';
-import DownloadButton from './DownloadButton';
 import { updateWatchedEpisodes } from './lastWatchedService';
 
 const VideoStyles = styled.div`
@@ -136,7 +135,6 @@ class MagnetPlayer extends Component {
               subtitlesSelected={subtitles => this.setState({selectedTrack: subtitles})}
               order={7}
             />
-            <DownloadButton order={7} />
           </ControlBar>
           <source src={this.state.videoUrl} />
           <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
