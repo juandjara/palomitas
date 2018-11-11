@@ -51,6 +51,7 @@ class MagnetPlayer extends Component {
   state = {
     loading: false,
     videoUrl: null,
+    videoMime: null,
     subtitles: [],
     selectedTrack: null
   }
@@ -80,6 +81,7 @@ class MagnetPlayer extends Component {
     popcornService.loadMagnet(magnet).then(files => {
       const biggestFile = this.selectBiggestFile(files);
       this.setState({
+        videoMime: biggestFile.mime,
         videoUrl: `${config.downloaderApi}${biggestFile.link}`
       })
       updateWatchedEpisodes(this.props.episodeData);
@@ -109,7 +111,7 @@ class MagnetPlayer extends Component {
   }
 
   render() {
-    const {videoUrl, subtitles, selectedTrack} = this.state;
+    const {videoUrl, videoMime, subtitles, selectedTrack} = this.state;
     const selectedSubs = this.getSelectedSubs();
     if (!videoUrl ) {
       return (
@@ -136,7 +138,7 @@ class MagnetPlayer extends Component {
               order={7}
             />
           </ControlBar>
-          <source src={this.state.videoUrl} />
+          <source src={this.state.videoUrl} type={videoMime} />
           <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
           {this.renderSubtitles()}
         </Player>
