@@ -71,6 +71,10 @@ class SubtitleSelector extends Component {
     const url = `${config.subtitleApi}/search?imdbid=${id}&season=${season}&episode=${episode}`;
     fetch(url).then(res => res.json())
     .then(data => {
+      if (!this.mounted) {
+        console.info('[SubtitleSelector] fetch promise for subtitles finished when component was unmounted. Url was ', url);
+        return;
+      }
       const subtitles = this.processSubtitles(data);
       this.setState({loading: false});
       this.emitSubtitles(subtitles);
@@ -89,7 +93,8 @@ class SubtitleSelector extends Component {
         id: subs.id,
         label: `${subs.lang} ${index > 0 ? index + 1 : ''}`,
         langcode: subs.langcode,
-        url: subs.links.vtt
+        url: subs.links.vtt,
+        url_srt: subs.links.srt
       }));
       return acum.concat(newSubs);
     }, []).sort((a,b) => {

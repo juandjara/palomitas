@@ -22,6 +22,9 @@ const VideoStyles = styled.div`
       text-shadow: 0 0 5px #333;
     }
   }
+  .dl-link {
+    margin-top: 12px;
+  }
 `;
 
 const LoadingStyles = styled.div`
@@ -87,9 +90,14 @@ class MagnetPlayer extends Component {
     })
   }
 
-  renderSubtitles() {
+  getSelectedSubs() {
     const {subtitles, selectedTrack} = this.state;
     const subs = subtitles.find(s => s.id === selectedTrack);
+    return subs;
+  }
+
+  renderSubtitles() {
+    const subs = this.getSelectedSubs();
     return subs && (
       <track
         default={true}
@@ -103,6 +111,7 @@ class MagnetPlayer extends Component {
 
   render() {
     const {videoUrl, subtitles, selectedTrack} = this.state;
+    const selectedSubs = this.getSelectedSubs();
     if (!videoUrl ) {
       return (
         <LoadingStyles>
@@ -133,6 +142,16 @@ class MagnetPlayer extends Component {
           <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
           {this.renderSubtitles()}
         </Player>
+        {this.state.videoUrl && (
+          <p className="dl-link">
+            <a href={this.state.videoUrl} download>Descargar video</a>
+          </p>
+        )}
+        {selectedSubs && (
+          <p className="dl-link">
+            <a href={selectedSubs.url_srt} download>Descargar subtitulos</a>
+          </p>
+        )}
       </VideoStyles>
     )
   }
