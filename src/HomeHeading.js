@@ -52,7 +52,7 @@ const HomeHeading = () => (
         <Icon icon="cloud" />
         <p>
           Proyecto de codigo abierto.
-          {' '} <a href="https://github.com/juandjara/palomitas-react">
+          {' '} <a href="https://github.com/juandjara/palomitas">
             Haz tus propias palomitas
           </a>
         </p>
