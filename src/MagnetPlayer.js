@@ -139,7 +139,7 @@ class MagnetPlayer extends Component {
             />
           </ControlBar>
           <source src={this.state.videoUrl} type={videoMime} />
-          <source src={`${this.state.videoUrl}?ffmpeg=remux`} type="video/webm" />
+          <source src={`${this.state.videoUrl}?transform=remux`} type="video/webm" />
           {this.renderSubtitles()}
         </Player>
         {this.state.videoUrl && (
