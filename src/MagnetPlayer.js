@@ -104,7 +104,7 @@ class MagnetPlayer extends Component {
         kind="subtitles"
         label={subs.label}
         srcLang={subs.langcode}
-        src={`https://${subs.url}`}
+        src={`https:${subs.url}`}
       />
     );
   }
