@@ -198,6 +198,9 @@ class Show extends Component {
     const url = `${config.catalogApi}/show/${id}`;
     fetch(url).then(res => res.json())
     .then(data => {
+      Object.keys(data.images).forEach(key => {
+        data.images[key] = data.images[key].replace("http", "https");
+      });
       const seasonMap = data.episodes.reduce((acum, elem) => {
         acum[elem.season] = acum[elem.season] || {
           label: `Temporada ${elem.season}`,
