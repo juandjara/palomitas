@@ -296,7 +296,9 @@ class Show extends Component {
             <ul>
               {selectedSeason.episodes.map(ep => (
                 <li key={ep.tvdb_id}
-                  className={selectedEpisode && ep.episode === selectedEpisode.episode ? 'selected' : ''}>
+                  className={selectedEpisode && 
+                    ep.episode === selectedEpisode.episode &&
+                    ep.season === selectedEpisode.season ? 'selected' : ''}>
                   <Link to={this.makeEpisodeLink(ep)}>
                     <span className="number">{this.formatEpisodeNumber(ep)}</span>
                     <span>{ep.title}</span>
