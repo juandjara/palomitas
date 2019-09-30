@@ -37,7 +37,7 @@ const HeaderStyle = styled.header`
       border: 2px solid transparent;
       background: transparent;
       color: white;
-      min-width: 200px;
+      min-width: 220px;
     }
     .material-icons {
       opacity: 0.5;

@@ -6,6 +6,7 @@ import theme from './theme';
 
 const HeadingStyle = styled.header`
   padding: 8px 16px;
+  margin-bottom: 2rem;
   h2 {
     margin: 1em;
     text-align: center;
@@ -20,7 +21,8 @@ const HeadingBox = styled(Box)`
   padding: 8px 1em;
   line-height: 1.4;
   .material-icons {
-    font-size: 50px;
+    font-size: 46px;
+    margin-bottom: .5rem;
   }
 `;
 
@@ -29,25 +31,25 @@ const HomeHeading = () => (
     <h2>El regreso de Popcorn Time y las series libres.</h2>
     <Flex flexWrap="wrap">
       <HeadingBox
-        fontSize={[1, 3]} 
+        fontSize={[1, 2]} 
         width={[1/2, 1/4]}>
         <Icon icon="whatshot" />
         <p>Las &uacute;ltimas novedades</p>
       </HeadingBox>
       <HeadingBox
-        fontSize={[1, 3]} 
+        fontSize={[1, 2]} 
         width={[1/2, 1/4]}>
         <Icon icon="movie" />
         <p>Todas las series en versi&oacute;n original</p>
       </HeadingBox>
       <HeadingBox
-        fontSize={[1, 3]} 
+        fontSize={[1, 2]} 
         width={[1/2, 1/4]}>
         <Icon icon="language" />
         <p>Subtitulos en todos los idiomas</p>
       </HeadingBox>
       <HeadingBox
-        fontSize={[1, 3]} 
+        fontSize={[1, 2]} 
         width={[1/2, 1/4]}>
         <Icon icon="cloud" />
         <p>

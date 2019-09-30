@@ -14,7 +14,7 @@ const Grid = styled.section`
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: ${theme.spaces[1]}px ${theme.spaces[2]}px;
+  grid-gap: 8px 12px;
   max-width: 100vw;
   padding: ${theme.spaces[2]}px;
   @media (max-width: 900px) {
@@ -59,13 +59,36 @@ const Grid = styled.section`
   }
 `;
 
+const Main = styled.main`
+  max-width: 1168px;
+  min-width: 70vw;
+  margin: 1rem auto;
+  flex-grow: 1;
+  .grid-header {
+    padding: 8px;
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    .title {
+      flex-grow: 1;
+      > h2 {
+        margin-bottom: 8px;
+        font-weight: lighter;
+        font-size: 32px;
+      }
+      > p {
+        opacity: 0.8;
+      } 
+    }
+  }
+`
+
 const SelectWrapper = styled.div`
-  margin-bottom: ${theme.spaces[4]}px;
-  display: flex;
-  align-items: center;
+  margin-top: 2rem;
   label {
+    opacity: 0.8;
     display: block;
-    margin-right: ${theme.spaces[2]}px;
+    margin-bottom: ${theme.spaces[2]}px;
   }
   > div {
     min-width: 180px;
@@ -146,32 +169,36 @@ class Home extends Component {
   }
 
   render() {
-    const {loading, sort, shows} = this.state;
+    const {loading, sort, shows, search} = this.state;
     return (
       <Fragment>
-        <HomeHeading />
-        <h2 style={{paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
-        <LastWatched />
-        <div style={{padding: 8}}>
-          <SelectWrapper>
-            <label htmlFor="sort">Ordenar por</label>
-            <Select
-              isSearchable={false}
-              value={sort}
-              options={config.sortOptions}
-              onChange={this.handleSortChange}
-            />
-          </SelectWrapper>
-          <p>Mostrando {shows.length} series:</p>
-        </div>
-        <Grid>
-          {shows.map(show => (
-            <Link to={`/show/${show._id}`} className="show" key={show._id}>
-              <img alt="poster" src={show.images.fanart} />
-              <div className="title">{show.title}</div>
-            </Link>
-          ))}
-        </Grid>
+        <Main>
+          <LastWatched />
+          <div className="grid-header">
+            <section className="title">
+              <h2>{search ? 'Resultados de búsqueda' : 'Catálogo de series'}</h2>
+              <p>Mostrando {shows.length} series</p>
+            </section>
+            <SelectWrapper>
+              <label htmlFor="sort">Ordenar por</label>
+              <Select
+                isSearchable={false}
+                value={sort}
+                name="sort"
+                options={config.sortOptions}
+                onChange={this.handleSortChange}
+              />
+            </SelectWrapper>
+          </div>
+          <Grid>
+            {shows.map(show => (
+              <Link to={`/show/${show._id}`} className="show" key={show._id}>
+                <img alt="poster" src={show.images.fanart} />
+                <div className="title">{show.title}</div>
+              </Link>
+            ))}
+          </Grid>
+        </Main>
         {loading ?
           <Spinner /> :
           <div style={{height: 1}}>

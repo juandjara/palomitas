@@ -65,9 +65,11 @@ class LastWatched extends Component {
     return `${ep.season}x${ep.episode < 10 ? `0${ep.episode}` : ep.episode}`;
   }
   render() {
-    return (
+    const episodes = getWatchedEpisodes()
+    return episodes.length > 0 && (
       <LastWatchedStyles>
-        {getWatchedEpisodes().map(ep => (
+        <h2 style={{paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
+        {episodes.map(ep => (
           <li key={ep.id}>
             <Link to={this.makeEpisodeLink(ep)}>
               <img alt="fanart" src={ep.image} />
