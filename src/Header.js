@@ -9,7 +9,7 @@ const HeaderStyle = styled.header`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 8px;
+  padding: 8px 12px;
   color: white;
   background-color: ${theme.colors.black2};
   > a {
@@ -18,12 +18,15 @@ const HeaderStyle = styled.header`
     align-items: center;
   }
   .logo {
-    height: 44px;
+    height: 40px;
     margin-right: 8px;
   }
   h2 {
-    font-weight: normal;
-    margin-left: 4px;
+    font-size: 28px;
+    line-height: 40px;
+    font-weight: lighter;
+    margin-left: 8px;
+    margin-top: 4px;
   }
   .search-box {
     background-color: ${theme.colors.black4};

@@ -6,7 +6,7 @@ import theme from './theme';
 
 const HeadingStyle = styled.header`
   padding: 8px 16px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   h2 {
     margin: 1em;
     text-align: center;
