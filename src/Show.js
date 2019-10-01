@@ -12,9 +12,12 @@ import Footer from './Footer';
 
 const ShowStyle = styled.main`
   .back-btn {
-    margin: 8px 0;
+    margin: 12px 0;
   }
   .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    flex: 1 0 auto;
     display: flex;
     align-items: flex-start;
     padding: 0 ${theme.spaces[2]}px;
@@ -24,11 +27,13 @@ const ShowStyle = styled.main`
   }
   @media (min-width: 768px) {
     .content {
+      margin: 0 16px;
       margin-top: ${theme.spaces[6]}px;
     }
   }
   .poster, .fanart {
     max-width: 100%;
+    border-radius: 4px;
   }
   .fanart {
     display: none;
@@ -42,7 +47,8 @@ const ShowStyle = styled.main`
   .info {
     h1 {
       font-size: ${theme.fontSizes[4]}px;
-      margin: ${theme.spaces[4]}px 0;
+      margin-top: 16px;
+      margin-bottom: 24px;
       text-shadow: ${theme.textShadow};
     }
     .status {
@@ -50,9 +56,13 @@ const ShowStyle = styled.main`
       margin-top: ${theme.spaces[2]}px;
       font-weight: bold;
     }
+    .rating {
+      opacity: 0.8;
+    }
     .synopsis {
-      margin: ${theme.spaces[4]}px 0;
+      margin: 20px 0;
       line-height: 1.5;
+      font-size: 18px;
       max-width: 768px;
       text-align: justify;
     }
@@ -83,7 +93,6 @@ const Genres = styled.p`
 const EpisodeList = styled.section`
   max-width: 300px;
   flex: 0 0 auto;
-  margin-right: ${theme.spaces[4]}px;
   .select {
     color: ${theme.colors.black4};
     width: 180px;
@@ -131,19 +140,16 @@ const SelectedEpSection = styled.section`
   margin-top: ${theme.spaces[6]}px;
   width: 768px;
   max-width: calc(100vw - 16px);
-  .subtitles {
-    flex: 0 0 300px;
-    margin-left: ${theme.spaces[3]}px;
-  }
   h2 {
     margin-bottom: ${theme.spaces[2]}px;
   }
-  small {
-    font-size: 14px;
+  .air-date {
+    opacity: 0.8;
   }
   .overview {
     line-height: 1.5;
-    margin: ${theme.spaces[4]}px 0;
+    font-size: 18px;
+    margin: 20px 0;
     max-width: 768px;
     text-align: justify;
   }
@@ -284,7 +290,7 @@ class Show extends Component {
     const {show, seasons, selectedSeason, selectedEpisode} = this.state;
     return (
       <Fragment>
-        <div className="layout" style={{maxWidth: 1100, margin: '0 auto', flex: '1 0 auto'}}>
+        <div className="layout">
           <EpisodeList>
             <BackButton />
             <img className="poster" alt="poster" src={show.images.poster} />
@@ -311,7 +317,7 @@ class Show extends Component {
             <img className="fanart" alt="fanart" src={show.images.fanart} />
             <section className="info">
               <h1>{show.title}</h1>
-              <p>{show.rating.percentage / 10} / 10</p>
+              <p className="rating">{show.rating.percentage / 10} / 10</p>
               <p className="status">{show.year} - {show.status}</p>
               <Genres>
                 {show.genres.map(genre => <span key={genre}>{genre}</span>)}
@@ -336,7 +342,7 @@ class Show extends Component {
     return (
       <SelectedEpSection>
         <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
-        <p>Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
+        <p className="air-date">Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
         <p className="overview">{ep.overview}</p>
         <div className="actions">
           <div className="quality-selector">
