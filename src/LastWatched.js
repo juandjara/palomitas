@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import { getWatchedEpisodes, removeWatchedEpisode } from './lastWatchedService';
 import styled from 'styled-components';
 import Button from './Button';
@@ -14,11 +14,16 @@ const LastWatchedStyles = styled.ul`
   li {
     margin-right: 16px;
     position: relative;
+    transition: transform 0.3s ease;
+    &:hover {
+      transform: scale(1.05);
+    }
     a {
       display: block;
     }
     img {
       width: 280px;
+      border-radius: 4px;
     }
     .info {
       display: flex;
@@ -67,30 +72,32 @@ class LastWatched extends Component {
   render() {
     const episodes = getWatchedEpisodes()
     return episodes.length > 0 && (
-      <LastWatchedStyles>
-        <h2 style={{paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
-        {episodes.map(ep => (
-          <li key={ep.id}>
-            <Link to={this.makeEpisodeLink(ep)}>
-              <img alt="fanart" src={ep.image} />
-            </Link>
-            <div className="info">
-              <p>
-                <strong>{ep.show_title}</strong>
-                <br />
-                <span>
-                  {this.formatEpisodeNumber(ep)}
-                  {' - '}
-                  {ep.ep_title}
-                </span>
-              </p>
-              <Button clear onClick={() => this.removeEpisode(ep)}>
-                <Icon icon="clear" size={20} />
-              </Button>
-            </div>
-          </li>
-        ))}
-      </LastWatchedStyles>
+      <Fragment>
+        <h2 style={{marginTop: '2.5rem', marginBottom: '.5rem', paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
+        <LastWatchedStyles>
+          {episodes.map(ep => (
+            <li key={ep.id}>
+              <Link to={this.makeEpisodeLink(ep)}>
+                <img alt="fanart" src={ep.image} />
+              </Link>
+              <div className="info">
+                <p>
+                  <strong>{ep.show_title}</strong>
+                  <br />
+                  <span>
+                    {this.formatEpisodeNumber(ep)}
+                    {' - '}
+                    {ep.ep_title}
+                  </span>
+                </p>
+                <Button clear onClick={() => this.removeEpisode(ep)}>
+                  <Icon icon="clear" size={20} />
+                </Button>
+              </div>
+            </li>
+          ))}
+        </LastWatchedStyles>
+      </Fragment>
     );
   }
 }
