@@ -2,8 +2,7 @@ language: node_js
 node_js:
   - "node"
 
-before_deploy:
-  script: npm run deploy
+before_deploy: npm run build && npm run copy
 
 deploy:
   provider: surge
