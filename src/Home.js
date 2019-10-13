@@ -10,13 +10,37 @@ import config from './config';
 import LastWatched from './LastWatched';
 import Footer from './Footer';
 
+const Main = styled.main`
+  max-width: 1168px;
+  min-width: 70vw;
+  margin: 1rem auto;
+  flex-grow: 1;
+  .grid-header {
+    padding: 8px 12px;
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    .title {
+      flex-grow: 1;
+      > h2 {
+        margin-bottom: 8px;
+        font-weight: lighter;
+        font-size: 32px;
+      }
+      > p {
+        opacity: 0.8;
+      } 
+    }
+  }
+`
+
 const Grid = styled.section`
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 8px 12px;
   max-width: 100vw;
-  padding: ${theme.spaces[2]}px;
+  padding: 8px 12px;
   @media (max-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -58,30 +82,6 @@ const Grid = styled.section`
     }
   }
 `;
-
-const Main = styled.main`
-  max-width: 1168px;
-  min-width: 70vw;
-  margin: 1rem auto;
-  flex-grow: 1;
-  .grid-header {
-    padding: 8px;
-    display: flex;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    .title {
-      flex-grow: 1;
-      > h2 {
-        margin-bottom: 8px;
-        font-weight: lighter;
-        font-size: 32px;
-      }
-      > p {
-        opacity: 0.8;
-      } 
-    }
-  }
-`
 
 const SelectWrapper = styled.div`
   margin-top: 2rem;

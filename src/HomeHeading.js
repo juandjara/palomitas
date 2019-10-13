@@ -8,7 +8,8 @@ const HeadingStyle = styled.header`
   padding: 8px 16px;
   margin-bottom: 1.5rem;
   h2 {
-    margin: 1em;
+    margin-top: 0;
+    margin-bottom: 2rem;
     text-align: center;
     font-weight: normal;
     font-size: 28px;

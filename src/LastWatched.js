@@ -1,18 +1,27 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import { getWatchedEpisodes, removeWatchedEpisode } from './lastWatchedService';
 import styled from 'styled-components';
 import Button from './Button';
 import Icon from './Icon';
 import { Link } from 'react-router-dom';
 
-const LastWatchedStyles = styled.ul`
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  overflow-x: auto;
-  padding: 8px;
+const LastWatchedStyles = styled.div`
+  max-width: 100vw;
+  margin-bottom: 1rem;
+  h2 {
+    margin-top: 2.5rem;
+    padding: 0 12px;
+  }
+  ul {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 8px 0;
+    margin: 0 12px;
+  }
   li {
-    margin-right: 16px;
+    margin-right: 12px;
     position: relative;
     transition: transform 0.3s ease;
     &:hover {
@@ -72,9 +81,9 @@ class LastWatched extends Component {
   render() {
     const episodes = getWatchedEpisodes()
     return episodes.length > 0 && (
-      <Fragment>
-        <h2 style={{marginTop: '2.5rem', marginBottom: '.5rem', paddingLeft: 8}}>&Uacute;ltimamente has visto:</h2>
-        <LastWatchedStyles>
+      <LastWatchedStyles>
+        <h2>&Uacute;ltimamente has visto:</h2>
+        <ul>
           {episodes.map(ep => (
             <li key={ep.id}>
               <Link to={this.makeEpisodeLink(ep)}>
@@ -96,8 +105,8 @@ class LastWatched extends Component {
               </div>
             </li>
           ))}
-        </LastWatchedStyles>
-      </Fragment>
+        </ul>
+      </LastWatchedStyles>
     );
   }
 }
