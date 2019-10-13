@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "node"
+
+before_deploy:
+  script: npm run deploy
+
+deploy:
+  provider: surge
+  project: ./build/
+  domain: palomitas.fuken.xyz
+  skip_cleanup: true
+  on:
+    branch: master
