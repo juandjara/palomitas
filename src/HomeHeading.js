@@ -16,6 +16,11 @@ const HeadingStyle = styled.header`
     line-height: 1.4;
     text-shadow: ${theme.textShadow};
   }
+  @media (max-width: 650px) {
+    h2 {
+      margin-top: 1rem;
+    }
+  }
 `;
 const HeadingBox = styled(Box)`
   text-align: center;
