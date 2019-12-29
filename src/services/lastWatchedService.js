@@ -1,4 +1,4 @@
-const KEY = 'palomitas_v4_lastwatched';
+export const KEY = 'palomitas_v4_lastwatched';
 
 export function getWatchedEpisodes() {
   const data = JSON.parse(localStorage.getItem(KEY) || '[]');

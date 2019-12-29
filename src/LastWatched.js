@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { getWatchedEpisodes, removeWatchedEpisode } from './lastWatchedService';
+import { getWatchedEpisodes, removeWatchedEpisode } from './services/lastWatchedService';
 import styled from 'styled-components';
 import Button from './Button';
 import Icon from './Icon';
