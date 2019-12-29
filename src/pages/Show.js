@@ -47,21 +47,20 @@ const ShowStyle = styled.main`
   .info {
     h1 {
       font-size: ${theme.fontSizes[4]}px;
-      margin-top: 16px;
-      margin-bottom: 24px;
+      margin: ${theme.spaces[4]}px 0;
       text-shadow: ${theme.textShadow};
     }
     .status {
       font-size: ${theme.fontSizes[2]}px;
-      margin-top: ${theme.spaces[2]}px;
+      margin: 12px 0;
       font-weight: bold;
     }
     .rating {
       opacity: 0.8;
     }
     .synopsis {
-      margin: 20px 0;
-      line-height: 1.5;
+      margin: ${theme.spaces[4]}px 0;
+      line-height: 1.6;
       font-size: 18px;
       max-width: 768px;
       text-align: justify;
@@ -70,7 +69,7 @@ const ShowStyle = styled.main`
 `;
 
 const Genres = styled.p`
-  margin: ${theme.spaces[2]}px 0;
+  margin: 12px 0;
   max-width: 100vw;
   display: flex;
   flex-wrap: wrap;
@@ -137,32 +136,35 @@ const EpisodeList = styled.section`
 `;
 
 const SelectedEpSection = styled.section`
-  margin-top: ${theme.spaces[6]}px;
   width: 768px;
   max-width: calc(100vw - 16px);
-  h2 {
-    margin-bottom: ${theme.spaces[2]}px;
-  }
-  .air-date {
-    opacity: 0.8;
-  }
-  .overview {
-    line-height: 1.5;
-    font-size: 18px;
-    margin: 20px 0;
-    max-width: 768px;
-    text-align: justify;
-  }
+
   .actions {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-top: ${theme.spaces[5]}px;
-    margin-bottom: ${theme.spaces[2]}px;
     @media (max-width: 600px) {
       flex-direction: column;
     }
   }
+
+  .ep-data {
+    margin: ${theme.spaces[5]}px 0;
+    h2 {
+      margin-bottom: ${theme.spaces[2]}px;
+    }
+    .air-date {
+      opacity: 0.8;
+    }
+    .overview {
+      line-height: 1.5;
+      font-size: 18px;
+      margin: 20px 0;
+      max-width: 768px;
+      text-align: justify;
+    }
+  }
+
 `;
 
 const BackButton = () => (
@@ -341,9 +343,17 @@ class Show extends Component {
     .map(key => ({label: key, ...ep.torrents[key]}));
     return (
       <SelectedEpSection>
-        <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
-        <p className="air-date">Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
-        <p className="overview">{ep.overview}</p>
+        <MagnetPlayer
+          magnet={this.state.selectedTorrent.url}
+          episodeData={{
+            id: this.state.show._id,
+            image: this.state.show.images.fanart,
+            show_title: this.state.show.title,
+            ep_title: ep.title,
+            episode: ep.episode,
+            season: ep.season,
+          }}
+        />
         <div className="actions">
           <div className="quality-selector">
             <label>Calidad: </label>
@@ -365,17 +375,11 @@ class Show extends Component {
             </Link>
           )}
         </div>
-        <MagnetPlayer
-          magnet={this.state.selectedTorrent.url}
-          episodeData={{
-            id: this.state.show._id,
-            image: this.state.show.images.fanart,
-            show_title: this.state.show.title,
-            ep_title: ep.title,
-            episode: ep.episode,
-            season: ep.season,
-          }}
-        />
+        <section className="ep-data">
+          <h2>{this.formatEpisodeNumber(ep)} {ep.title}</h2>
+          <p className="air-date">Emitido el {new Date(ep.first_aired * 1000).toLocaleDateString()}</p>
+          <p className="overview">{ep.overview}</p>
+        </section>
       </SelectedEpSection>
     );
   }
