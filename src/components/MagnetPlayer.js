@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import { BigPlayButton, Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
-import config from './config';
-import popcornService from './services/popcornService';
+import config from '../config';
+import popcornService from '../services/popcornService';
 import Button from './Button';
 import Icon from './Icon';
 import styled from 'styled-components';
 import SubtitleSelector from './SubtitleSelector';
-import { updateWatchedEpisodes } from './services/lastWatchedService';
+import { updateWatchedEpisodes } from '../services/lastWatchedService';
 
 const VideoStyles = styled.div`
   .video-react {

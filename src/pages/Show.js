@@ -1,14 +1,14 @@
 import React, {Component, Fragment} from 'react';
-import Icon from './Icon';
-import Button from './Button';
+import Icon from '../components/Icon';
+import Button from '../components/Button';
 import styled from 'styled-components';
-import config from './config';
-import Spinner from './Spinner';
-import theme from './theme';
+import config from '../config';
+import Spinner from '../components/Spinner';
+import theme from '../theme';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
-import MagnetPlayer from './MagnetPlayer';
-import Footer from './Footer';
+import MagnetPlayer from '../components/MagnetPlayer';
+import Footer from '../components/Footer';
 
 const ShowStyle = styled.main`
   .back-btn {

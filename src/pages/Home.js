@@ -1,14 +1,14 @@
 import React, {Fragment, Component} from 'react';
-import HomeHeading from './HomeHeading';
+import HomeHeading from '../components/HomeHeading';
+import Footer from '../components/Footer';
 import Select from 'react-select';
 import styled from 'styled-components';
-import theme from './theme';
-import Spinner from './Spinner';
+import theme from '../theme';
+import Spinner from '../components/Spinner';
 import Waypoint from 'react-waypoint';
 import { Link } from 'react-router-dom';
-import config from './config';
-import LastWatched from './LastWatched';
-import Footer from './Footer';
+import config from '../config';
+import LastWatched from '../components/LastWatched';
 
 const Main = styled.main`
   max-width: 1168px;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Headroom from 'react-headroom';
 import Icon from './Icon';
-import theme from './theme';
+import theme from '../theme';
 import { withRouter, Link } from 'react-router-dom';
 
 const HeaderStyle = styled.header`

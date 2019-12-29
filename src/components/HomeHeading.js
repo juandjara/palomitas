@@ -1,6 +1,6 @@
 import React from 'react';
 import {Flex, Box} from 'rebass'
-import Icon from './Icon';
+import Icon from './components/Icon';
 import styled from 'styled-components';
 import theme from './theme';
 

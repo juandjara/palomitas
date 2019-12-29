@@ -1,17 +1,15 @@
 import React, { Fragment, Component } from 'react';
-import Header from './Header';
+import Header from './components/Header';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { ContextProvider } from './Context';
-import Home from './Home';
+import Home from './pages/Home';
+import Show from './pages/Show';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
-import Show from './Show';
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <ContextProvider>
         <ThemeProvider theme={theme}>
           <Fragment>
           <Header></Header>
@@ -22,7 +20,6 @@ class App extends Component {
           </Switch>
           </Fragment>
         </ThemeProvider>
-        </ContextProvider>
       </BrowserRouter>
     );
   }
