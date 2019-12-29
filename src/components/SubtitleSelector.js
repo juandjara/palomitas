@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import config from './config';
-import theme from './theme';
+import config from '../config';
+import theme from '../theme';
 import styled from 'styled-components';
 import Spinner from './Spinner';
-import Icon from './components/Icon';
+import Icon from './Icon';
 
 const SubtitleStyle = styled.div`
   position: relative;

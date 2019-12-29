@@ -1,8 +1,8 @@
 import React from 'react';
 import {Flex, Box} from 'rebass'
-import Icon from './components/Icon';
+import Icon from '../components/Icon';
 import styled from 'styled-components';
-import theme from './theme';
+import theme from '../theme';
 
 const HeadingStyle = styled.header`
   padding: 8px 16px;
