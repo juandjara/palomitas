@@ -1,7 +1,6 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import theme from '../theme';
 import styled from 'styled-components';
-import Spinner from './Spinner';
 import Icon from './Icon';
 
 const SubtitleStyle = styled.div`
