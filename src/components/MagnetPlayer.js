@@ -8,6 +8,7 @@ import Icon from './Icon';
 import styled from 'styled-components';
 import SubtitleSelector from './SubtitleSelector';
 import { updateWatchedEpisodes } from '../services/lastWatchedService';
+import Spinner from './Spinner';
 
 const VideoStyles = styled.div`
   .video-react {
@@ -21,10 +22,21 @@ const VideoStyles = styled.div`
       text-shadow: 0 0 5px #333;
     }
   }
-  .dl-link {
-    margin-top: 12px;
-  }
 `;
+
+const Links = styled.div`
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  p {
+    margin-right: 12px;
+  }
+  .material-icons {
+    margin-right: 4px;
+    opacity: 0.75;
+  }
+`
 
 const LoadingStyles = styled.div`
   margin: 1em 0;
@@ -78,9 +90,11 @@ class MagnetPlayer extends Component {
 
   loadVideo() {
     const magnet = this.props.magnet;
+    this.setState({ loading: true })
     popcornService.loadMagnet(magnet).then(files => {
       const biggestFile = this.selectBiggestFile(files);
       this.setState({
+        loading: false,
         videoMime: biggestFile.mime,
         videoUrl: `${config.downloaderApi}${biggestFile.link}`
       })
@@ -111,13 +125,13 @@ class MagnetPlayer extends Component {
   }
 
   render() {
-    const {videoUrl, videoMime, subtitles, selectedTrack} = this.state;
+    const {loading, videoUrl, videoMime, subtitles, selectedTrack} = this.state;
     const selectedSubs = this.getSelectedSubs();
-    if (!videoUrl ) {
+    if (!videoUrl) {
       return (
         <LoadingStyles>
           <Button className="play-btn" onClick={() => this.loadVideo()}>
-            <Icon icon="play_arrow" />
+            {loading ? <Spinner /> : <Icon icon="play_arrow" />}
           </Button>
         </LoadingStyles>
       );
@@ -142,16 +156,24 @@ class MagnetPlayer extends Component {
           <source src={`${this.state.videoUrl}?transform=remux`} type="video/webm" />
           {this.renderSubtitles()}
         </Player>
-        {this.state.videoUrl && (
-          <p className="dl-link">
-            <a href={this.state.videoUrl} download>Descargar video</a>
+        <Links>
+          {this.state.videoUrl && (
+            <p>
+              <Icon icon="file_download" />
+              <a href={this.state.videoUrl} download>Descargar video</a>
+            </p>
+          )}
+          {selectedSubs && (
+            <p>
+              <Icon icon="file_download" />
+              <a href={selectedSubs.url_srt} download>Descargar subtitulos</a>
+            </p>
+          )}
+          <p>
+            <Icon icon="link" />
+            <a href={this.props.magnet}>Enlace Magnet</a>
           </p>
-        )}
-        {selectedSubs && (
-          <p className="dl-link">
-            <a href={selectedSubs.url_srt} download>Descargar subtitulos</a>
-          </p>
-        )}
+        </Links>
       </VideoStyles>
     )
   }
