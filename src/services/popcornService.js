@@ -73,7 +73,7 @@ export default {
       } else {
         this.postTorrent(magnet).catch(reject);
         this.socket.on(
-          'interested',
+          'ready',
           (hash) => {
             this.fetchTorrentFiles(hash)
             .then(resolve)
