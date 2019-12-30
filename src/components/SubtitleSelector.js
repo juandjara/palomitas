@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import config from '../config';
 import theme from '../theme';
 import styled from 'styled-components';
 import Spinner from './Spinner';
@@ -40,73 +39,7 @@ const SubtitleStyle = styled.div`
 `;
 
 class SubtitleSelector extends Component {
-  mounted = false;
-  state = { loading: false }
-
-  componentDidMount() {
-    this.mounted = true;
-    this.fetchSubtitles();
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-  }
-
-  componentDidUpdate(prevProps) {
-    const sameProps = prevProps.episode === this.props.episode &&
-      prevProps.season === this.props.season &&
-      prevProps.id === this.props.id;
-    if (!sameProps) {
-      this.fetchSubtitles();
-    }
-  }
-
-  fetchSubtitles() {
-    if (!this.mounted) {
-      return;
-    }
-    this.emitSubtitles([]);
-    this.setState({loading: true})
-    const {id, episode, season} = this.props;
-    const url = `${config.subtitleApi}/search?imdbid=${id}&season=${season}&episode=${episode}`;
-    fetch(url).then(res => res.json())
-    .then(data => {
-      if (!this.mounted) {
-        console.info('[SubtitleSelector] fetch promise for subtitles finished when component was unmounted. Url was ', url);
-        return;
-      }
-      const subtitles = this.processSubtitles(data);
-      this.setState({loading: false});
-      this.emitSubtitles(subtitles);
-      const subs_es = subtitles.find(s => s.langcode === 'es');
-      const subs_en = subtitles.find(s => s.langcode === 'en');
-      const defaultSelection = subs_es ? subs_es.id : subs_en && subs_en.id;
-      this.emitSelection(defaultSelection);
-    })
-  }
-  
-  processSubtitles(data) {
-    return Object.keys(data)
-    .reduce((acum, key) => {
-      const elem = data[key];
-      const newSubs = elem.map((subs, index) => ({
-        id: subs.id,
-        label: `${subs.lang} ${index > 0 ? index + 1 : ''}`,
-        langcode: subs.langcode,
-        url: subs.links.vtt,
-        url_srt: subs.links.srt
-      }));
-      return acum.concat(newSubs);
-    }, []).sort((a,b) => {
-      if (a.label > b.label) {
-        return 1;
-      }
-      if (a.label < b.label) {
-        return -1;
-      }
-      return 0;
-    });
-  }
+  state = { popupOpen: false }
 
   openPopup = () => {
     this.setState({popupOpen: true});
@@ -126,44 +59,34 @@ class SubtitleSelector extends Component {
     }
   }
 
-  emitSubtitles(subtitles) {
-    if (typeof this.props.subtitlesLoaded === 'function') {
-      this.props.subtitlesLoaded(subtitles);
-    }
-  }
-
   render() {
     const {subtitles, selectedTrack} = this.props;
     return (
       <SubtitleStyle 
         title="Subtitulos"
         className="video-react-control video-react-button">
-        {this.state.loading ? (
-          <Icon icon="subtitles" style={{opacity: 0.5}} />
-        ) : (
-          <Icon
-            onClick={() => this.openPopup()}
-            role="button"
-            tabIndex="0"
-            icon="subtitles"
-          />
-        )}
+        {subtitles.length === 0 
+          ? <Icon icon="subtitles" style={{opacity: 0.5}} />
+          : (
+            <Icon
+              onClick={() => this.openPopup()}
+              role="button"
+              tabIndex="0"
+              icon="subtitles"
+            />
+          )
+        }
         {this.state.popupOpen && (
           <ul className="popup">
-            {this.state.loading ? 
-              <Spinner /> : 
-              <Fragment>
-                {subtitles.map(subs => (
-                  <li
-                    className={selectedTrack === subs.id ? 'selected' : ''}
-                    onClick={() => this.emitSelection(subs.id)}
-                    key={subs.id}>
-                    {subs.label}
-                  </li>
-                ))}
-                <li onClick={() => this.emitSelection(null)}>Disabled</li>
-              </Fragment>
-            }
+            {subtitles.map(subs => (
+              <li
+                className={selectedTrack === subs.id ? 'selected' : ''}
+                onClick={() => this.emitSelection(subs.id)}
+                key={subs.id}>
+                {subs.label}
+              </li>
+            ))}
+            <li onClick={() => this.emitSelection(null)}>Disabled</li>
           </ul>
         )}
       </SubtitleStyle>
