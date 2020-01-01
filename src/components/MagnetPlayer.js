@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import SubtitleSelector from './SubtitleSelector';
 import { updateWatchedEpisodes } from '../services/lastWatchedService';
 import Spinner from './Spinner';
+import { fetchSubtitles } from '../services/subtitlesService';
 
 const VideoStyles = styled.div`
   .video-react {
@@ -90,10 +91,11 @@ class MagnetPlayer extends Component {
 
   loadVideo() {
     const magnet = this.props.magnet;
+    const {id, episode, season} = this.props.episodeData;
     this.setState({ loading: true, subtitles: [] })
     Promise.all([
       popcornService.loadMagnet(magnet),
-      this.fetchSubtitles()
+      fetchSubtitles({ id, episode, season })
     ]).then(data => {
       const [ files, subtitlesData ] = data
       const { subtitles, selectedTrack } = subtitlesData
@@ -110,42 +112,6 @@ class MagnetPlayer extends Component {
       console.error(err);
       window.alert('Algo ha fallado :c');
     })
-  }
-
-  fetchSubtitles() {
-    const {id, episode, season} = this.props.episodeData;
-    const url = `${config.subtitleApi}/search?imdbid=${id}&season=${season}&episode=${episode}`;
-    return fetch(url).then(res => res.json())
-    .then(data => {
-      const subtitles = this.processSubtitles(data);
-      const subs_es = subtitles.find(s => s.langcode === 'es');
-      const subs_en = subtitles.find(s => s.langcode === 'en');
-      const defaultSelection = subs_es ? subs_es.id : subs_en && subs_en.id;
-      return { subtitles, selectedTrack: defaultSelection }
-    })
-  }
-
-  processSubtitles(data) {
-    return Object.keys(data)
-    .reduce((acum, key) => {
-      const elem = data[key];
-      const newSubs = elem.map((subs, index) => ({
-        id: subs.id,
-        label: `${subs.lang} ${index > 0 ? index + 1 : ''}`,
-        langcode: subs.langcode,
-        url: subs.links.vtt,
-        url_srt: subs.links.srt
-      }));
-      return acum.concat(newSubs);
-    }, []).sort((a,b) => {
-      if (a.label > b.label) {
-        return 1;
-      }
-      if (a.label < b.label) {
-        return -1;
-      }
-      return 0;
-    });
   }
 
   getSelectedSubs() {
