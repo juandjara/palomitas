@@ -8,7 +8,7 @@
     "react-dom": "^16.5.1",
     "react-headroom": "^2.2.2",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^3.3.0",
     "react-select": "^2.0.0",
     "react-waypoint": "^8.0.3",
     "rebass": "^3.0.0-4",
@@ -22,11 +22,10 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "copy": "cp build/index.html build/200.html",
-    "surge": "surge build palomitas.fuken.xyz",
-    "deploy": "npm run build && npm run copy && npm run surge"
+    "deploy": "npm run build && npm run copy && now"
   },
   "devDependencies": {
-    "surge": "^0.20.1"
+    "now": "^16.7.0"
   },
   "browserslist": [
     ">0.2%",
