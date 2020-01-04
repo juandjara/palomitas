@@ -52,9 +52,11 @@ const LastWatchedStyles = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-weight: 300;
         strong {
           font-weight: bold;
+        }
+        span {
+          opacity: 0.8;
         }
       }
       button {

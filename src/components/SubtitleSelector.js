@@ -26,7 +26,7 @@ const SubtitleStyle = styled.div`
     padding: 4px 0;
     li {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: bold;
       font-family: sans-serif;
       padding: 6px 4px;
       &.selected, &:hover {

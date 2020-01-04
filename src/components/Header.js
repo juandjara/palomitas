@@ -24,9 +24,8 @@ const HeaderStyle = styled.header`
   h2 {
     font-size: 28px;
     line-height: 40px;
-    font-weight: lighter;
+    font-weight: 300;
     margin-left: 8px;
-    margin-top: 4px;
   }
   .search-box {
     background-color: ${theme.colors.black4};

@@ -24,7 +24,7 @@ const Main = styled.main`
       flex-grow: 1;
       > h2 {
         margin-bottom: 8px;
-        font-weight: lighter;
+        font-weight: normal;
         font-size: 32px;
       }
       > p {

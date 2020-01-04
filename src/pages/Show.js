@@ -76,7 +76,7 @@ const Genres = styled.p`
   span {
     display: block;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: bold;
     line-height: 14px;
     margin-top: 2px;
     padding: 2px 6px;
