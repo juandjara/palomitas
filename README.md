@@ -11,5 +11,5 @@ To see other available scripts check the `scripts` field on `package.json`
 This project uses the following services
 * https://palomitas-dl.fuken.xyz/
 * https://subdown.fuken.xyz/
-* https://tv-v2.api-fetch.website/
+* Popcorn Time API (not mantained or developed by me)
 
