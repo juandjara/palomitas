@@ -13,3 +13,7 @@ This project uses the following services
 * https://subdown.fuken.xyz/
 * Popcorn Time API (not mantained or developed by me)
 
+## Deployment
+
+Deployment is set to automatically detect git pushes to the `master` branch.
+It run the `build` command and deploys the minified assets to https://now.sh
