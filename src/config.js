@@ -12,7 +12,7 @@ export default {
     {label: 'Última actualización', value: 'updated'},
     {label: 'Año de emision', value: 'year'}
   ],
-  catalogApi: 'https://tv-v2.api-fetch.sh',
+  catalogApi: 'https://cors-anywhere.herokuapp.com/https://tv-v2.api-fetch.sh',
   subtitleApi: 'https://subdown.fuken.xyz',
   downloaderApi: 'https://palomitas-dl.fuken.xyz'
 }
