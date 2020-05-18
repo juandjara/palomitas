@@ -173,7 +173,7 @@ class Home extends Component {
     return (
       <Fragment>
         <Main>
-          <HomeHeading />
+          {/* <HomeHeading /> */}
           <LastWatched />
           <div className="grid-header">
             <section className="title">

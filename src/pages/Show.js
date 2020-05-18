@@ -27,13 +27,16 @@ const ShowStyle = styled.main`
   }
   @media (min-width: 768px) {
     .content {
-      margin: 0 16px;
+      margin: 0 24px;
       margin-top: ${theme.spaces[6]}px;
     }
   }
   .poster, .fanart {
     max-width: 100%;
     border-radius: 4px;
+  }
+  .poster {
+    box-shadow: 0 0 8px 2px rgba(0,0,0, 0.25);
   }
   .fanart {
     display: none;
@@ -66,6 +69,26 @@ const ShowStyle = styled.main`
       text-align: justify;
     }
   }
+  .background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 72%;
+    filter: brightness(0.2) blur(12px);
+    z-index: -1;
+    overflow: hidden;
+    transform: translateX(-8px);
+    background-size: cover;
+  }
+
+  @media (max-width: 768px) {
+    .background-image {
+      max-height: none;
+    }
+  }
 `;
 
 const Genres = styled.p`
@@ -92,6 +115,7 @@ const Genres = styled.p`
 const EpisodeList = styled.section`
   max-width: 300px;
   flex: 0 0 auto;
+  margin-top: 24px;
   .select {
     color: ${theme.colors.black4};
     width: 180px;
@@ -292,9 +316,10 @@ class Show extends Component {
     const {show, seasons, selectedSeason, selectedEpisode} = this.state;
     return (
       <Fragment>
+        <div className="background-image" style={{ backgroundImage: `url("${show.images.fanart}")` }}></div>
         <div className="layout">
           <EpisodeList>
-            <BackButton />
+            {/* <BackButton /> */}
             <img className="poster" alt="poster" src={show.images.poster} />
             <Select className="select"
               isSearchable={false}
@@ -387,7 +412,7 @@ class Show extends Component {
   render() {
     const loadingContent = (
       <Fragment>
-        <BackButton />
+        {/* <BackButton /> */}
         <Spinner />
       </Fragment>
     )
