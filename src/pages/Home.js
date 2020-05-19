@@ -110,7 +110,8 @@ class Home extends Component {
     page: 1,
     search: '',
     shows: [],
-    perPage: 50
+    perPage: 50,
+    hasMorePages: false
   }
 
   componentDidMount() {
@@ -149,6 +150,7 @@ class Home extends Component {
   }
 
   fetchShows() {
+    const PAGE_SIZE = 50
     const {sort, genre, page, search} = this.state;
     this.setState({loading: true})
     const url = `${config.catalogApi}/shows/${page}?sort=${sort.value}&genre=${genre.value}`;
@@ -170,13 +172,14 @@ class Home extends Component {
       })
       this.setState(prevState => ({
         shows: prevState.shows.concat(parsed),
-        loading: false
+        loading: false,
+        hasMorePages: page === 1 ? true : parsed.length === PAGE_SIZE
       }))
     })
   }
 
   render() {
-    const {loading, genre, sort, shows, search} = this.state;
+    const {loading, genre, sort, shows, search, hasMorePages} = this.state;
     return (
       <Fragment>
         <Main>
@@ -219,9 +222,11 @@ class Home extends Component {
         </Main>
         {loading ?
           <Spinner /> :
-          <div style={{height: 1}}>
-            <Waypoint scrollableAncestor={window} onEnter={this.handleNextPage} />
-          </div>
+          hasMorePages && (
+            <div style={{height: 1}}>
+              <Waypoint scrollableAncestor={window} onEnter={this.handleNextPage} />
+            </div>
+          )
         }
         <Footer>Palomitas v4. 2018</Footer>
       </Fragment>
