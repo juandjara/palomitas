@@ -12,7 +12,7 @@ import LastWatched from '../components/LastWatched';
 
 const Main = styled.main`
   max-width: 1168px;
-  min-width: 70vw;
+  min-width: 80vw;
   margin: 1rem auto;
   flex-grow: 1;
   .grid-header {
@@ -85,6 +85,8 @@ const Grid = styled.section`
 
 const SelectWrapper = styled.div`
   margin-top: 2rem;
+  margin-left: 16px;
+
   label {
     opacity: 0.8;
     display: block;
@@ -104,6 +106,7 @@ class Home extends Component {
   state = {
     loading: true,
     sort: config.sortOptions[0],
+    genre: config.genreOptions[0],
     page: 1,
     search: '',
     shows: [],
@@ -132,6 +135,10 @@ class Home extends Component {
     this.setState({sort, page: 1, shows: []}, () => this.fetchShows());
   }
 
+  handleGenreChange = (genre) => {
+    this.setState({ genre, page: 1, shows: [] }, () => this.fetchShows());
+  }
+
   handleNextPage = () => {
     if (this.state.loading || this.state.page === 'all') {
       return;
@@ -142,9 +149,9 @@ class Home extends Component {
   }
 
   fetchShows() {
-    const {sort, page, search} = this.state;
+    const {sort, genre, page, search} = this.state;
     this.setState({loading: true})
-    const url = `${config.catalogApi}/shows/${page}?sort=${sort.value}`;
+    const url = `${config.catalogApi}/shows/${page}?sort=${sort.value}&genre=${genre.value}`;
     return fetch(url).then(res => res.json())
     .then(data => {
       const parsed = data.map(show => {
@@ -169,7 +176,7 @@ class Home extends Component {
   }
 
   render() {
-    const {loading, sort, shows, search} = this.state;
+    const {loading, genre, sort, shows, search} = this.state;
     return (
       <Fragment>
         <Main>
@@ -180,6 +187,16 @@ class Home extends Component {
               <h2>{search ? 'Resultados de búsqueda' : 'Catálogo de series'}</h2>
               <p>Mostrando {shows.length} series</p>
             </section>
+            <SelectWrapper>
+              <label htmlFor="genre">Género</label>
+              <Select
+                isSearchable={false}
+                value={genre}
+                name="genre"
+                options={config.genreOptions}
+                onChange={this.handleGenreChange}
+              />
+            </SelectWrapper>
             <SelectWrapper>
               <label htmlFor="sort">Ordenar por</label>
               <Select
