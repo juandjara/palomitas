@@ -22,11 +22,11 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "copy": "cp build/index.html build/200.html",
-    "deploy": "npm run build && npm run copy && now",
-    "deploy:prod": "npm run build && npm run copy && now --prod"
+    "deploy": "npm run build && npm run copy && npm run surge",
+    "surge": "surge build palomitas.fuken.xyz"
   },
   "devDependencies": {
-    "now": "^16.7.0"
+    "surge": "^0.21.3"
   },
   "browserslist": [
     ">0.2%",
