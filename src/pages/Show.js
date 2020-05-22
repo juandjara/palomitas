@@ -266,7 +266,7 @@ class Show extends Component {
   selectEpisode(epNumber) {
     const season = this.state.seasons.find(s => s.value === epNumber.season);
     const episode = season && season.episodes.find(e => e.episode === epNumber.episode);
-    const torrent = episode.torrents[0];
+    const torrent = episode.torrents['720p'] || episode.torrents[0];
     this.setState({
       selectedSeason: season,
       selectedEpisode: episode,
